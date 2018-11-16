@@ -1,18 +1,27 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div class="home">
+        <!--<button v-on:click="dark = !dark">Theme</button>-->
+        <editor></editor>
+    </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+    // @ is an alias to /src
+    import Editor from '@/components/Editor.vue'
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'home',
+        data() {
+            return {
+            }
+        },
+        methods: {
+            test() {
+                window.console.log(this.$i18n)
+            }
+        },
+        components: {
+            Editor
+        }
+    }
 </script>

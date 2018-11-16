@@ -1,0 +1,47 @@
+@light-color: black;
+@light-primary-color: blue;
+@light-danger-color: red;
+@light-background-color: white;
+
+@dark-color: white;
+@dark-primary-color: orange;
+@dark-danger-color: red;
+@dark-background-color: black;
+
+
+.theme(@style) {
+  .theme-dark(@style);
+  .theme-light(@style);
+}
+
+.theme-dark(@style) {
+  body.theme-dark & {
+
+    @color: @dark-color;
+    @primary-color: @dark-primary-color;
+    @danger-color: @dark-danger-color;
+    @background-color: @dark-background-color;
+
+    @style();
+  }
+}
+.theme-light(@style) {
+  body.theme-light & {
+
+    @color: @light-color;
+    @primary-color: @light-primary-color;
+    @danger-color: @light-danger-color;
+    @background-color: @light-background-color;
+
+    @style();
+  }
+}
+
+.theme-color(@prop: color) {
+  body.theme-dark & {
+    @{prop}: @dark-color;
+  }
+  body.theme-light & {
+    @{prop}: @light-color;
+  }
+}

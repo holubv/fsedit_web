@@ -1,0 +1,186 @@
+.ace-idea .ace_gutter {
+    background: #f0f0f0;
+    color: #999999;
+}
+
+.ace-idea .ace_print-margin {
+    width: 1px;
+    background: #e8e8e8;
+}
+
+.ace-idea {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+.ace-idea .ace_cursor {
+    color: #050505;
+}
+
+.ace-idea .ace_marker-layer .ace_selection {
+    background: #526DA5!important;
+}
+
+.ace-idea.ace_multiselect .ace_selection.ace_start {
+    box-shadow: 0 0 3px 0 #FFFFFF;
+    border-radius: 2px;
+}
+
+.ace-idea .ace_marker-layer .ace_step {
+    background: rgb(198, 219, 174)
+}
+
+.ace-idea .ace_marker-layer .ace_bracket {
+    background-color: #99CCFF;
+}
+
+.ace-idea [class^='ace_br'], .ace-idea [class*=' ace_br'] {
+    border-radius: 0;
+}
+
+.ace-idea .ace_gutter-active-line,
+.ace-idea .ace_marker-layer .ace_active-line {
+    background: #fffae3;
+}
+
+.ace-idea .ace_marker-layer .ace_selected-word {
+    background-color: #E4E4FF;
+}
+
+.ace-idea .ace_fold {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.ace-idea .ace_boolean,
+.ace-idea .ace_keyword {
+    color: #000080;
+    font-weight: bold;
+}
+
+.ace-idea .ace_keyword.ace_operator {
+    color: #000000;
+    font-weight: normal;
+}
+
+.ace-idea .ace_constant.ace_language {
+    color: #660E7A;
+}
+
+.ace-idea .ace_constant.ace_numeric {
+    color: #0000FF;
+}
+
+.ace-idea .ace_constant.ace_character {
+    color: #660E7A;
+}
+
+.ace-idea .ace_constant.ace_other {
+    color: #660E7A;
+}
+
+.ace-idea .ace_support.ace_function {
+    color: #000000;
+}
+
+.ace-idea .ace_support.ace_constant {
+    color: #660E7A;
+}
+
+.ace-idea .ace_support.ace_class {
+    color: #000000;
+}
+
+.ace-idea .ace_support.ace_type {
+    color: #000000;
+}
+
+.ace-idea .ace_storage {
+    color: #000080;
+    font-weight: bold;
+}
+
+.ace-idea .ace_storage.ace_type {
+    color: #000080;
+    font-weight: bold;
+}
+
+.ace-idea .ace_invalid {
+    color: #008000;
+}
+
+.ace-idea .ace_invalid.ace_deprecated {
+    color: #008000;
+}
+
+.ace-idea .ace_string {
+    color: #008000;
+}
+
+.ace-idea .ace_comment {
+    font-style: italic;
+    color: #808080;
+}
+
+.ace-idea .ace_variable {
+    color: #660000;
+}
+
+.ace-idea .ace_variable.ace_parameter {
+    color: #000000;
+}
+
+.ace-idea .ace_entity.ace_other.ace_attribute-name {
+    color: #0000FF;
+}
+
+.ace-idea .ace_entity.ace_name.ace_function {
+    color: #000000;
+}
+
+.ace-idea .ace_entity.ace_name.ace_tag {
+    color: #000080;
+}
+
+.ace-idea .ace_indent-guide {
+    position: relative;
+}
+
+.ace-idea .ace_indent-guide::after {
+    content: " ";
+    margin-left: calc(100% / 8 - 1px);
+    position: absolute;
+    border-left: 1px solid #e8e8e8;
+    z-index: -1;
+}
+
+/*
+    xml, html
+ */
+.ace-idea .ace_xml.ace_meta.ace_tag {
+    color: #000080;
+    font-weight: bold;
+}
+.ace-idea .ace_xml.ace_entity.ace_attribute-name {
+    color: #0000FF;
+    font-weight: bold;
+}
+.ace-idea .ace_xml.ace_attribute-value {
+    color: #008000;
+    font-weight: bold;
+}
+.ace-idea .ace_xml[class*='ace_attribute'] {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+.ace-idea .ace_xml[class*='ace_tag'] {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+/*
+    php
+ */
+.ace-idea .ace_php_tag {
+    color: #000080;
+    font-weight: bold;
+    background-color: rgba(222, 235, 255, 0.5);
+}
