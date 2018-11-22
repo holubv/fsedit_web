@@ -1,5 +1,6 @@
 {
   "login": "Login",
+  "settings": "Settings",
   "themes": {
     "light": "Light",
     "dark": "Dark"

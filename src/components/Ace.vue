@@ -1,10 +1,10 @@
 <template>
-    <div style="width: 100%; height: 100vh;"></div>
+    <div style="width: 100%; height: 100%;"></div>
 </template>
 
 <script>
     import * as ace from 'brace';
-    //import 'brace/ext/modelist';
+    import 'brace/ext/modelist';
     //import 'brace/ext/searchbox';
     import 'brace/ext/language_tools';
     import '@/theme/editor/darkula.js';
@@ -97,7 +97,7 @@
             });
             this.editor.focus();
 
-            //this.modes = ace.acequire('ace/ext/modelist');
+            this.modes = ace.acequire('ace/ext/modelist');
         }
     }
 </script>

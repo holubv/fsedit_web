@@ -1,12 +1,14 @@
 @light-color: black;
-@light-primary-color: blue;
+@light-color-invert: white;
+@light-primary-color: #4b87c7;
 @light-danger-color: red;
-@light-background-color: white;
+@light-background-color: #f2f2f2;
 
 @dark-color: white;
+@dark-color-invert: black;
 @dark-primary-color: orange;
 @dark-danger-color: red;
-@dark-background-color: black;
+@dark-background-color: #3c3f41;
 
 
 .theme(@style) {
@@ -18,6 +20,7 @@
   body.theme-dark & {
 
     @color: @dark-color;
+    @color-invert: @dark-color-invert;
     @primary-color: @dark-primary-color;
     @danger-color: @dark-danger-color;
     @background-color: @dark-background-color;
@@ -29,6 +32,7 @@
   body.theme-light & {
 
     @color: @light-color;
+    @color-invert: @light-color-invert;
     @primary-color: @light-primary-color;
     @danger-color: @light-danger-color;
     @background-color: @light-background-color;

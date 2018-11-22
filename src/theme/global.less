@@ -1,2 +1,22 @@
 @import "themes";
 @import (reference, inline) "reference.less";
+
+@nav-height: 28px;
+@foot-height: 18px;
+
+.font(@size: 16px; @weight: 400; @family: 'Open Sans', sans-serif) {
+  font-family: @family;
+  font-size: @size;
+  font-weight: @weight;
+}
+
+.logo-font(@size: 16px) {
+  .font(@size; bold; 'Ubuntu', sans-serif);
+}
+
+.user-select(@type) {
+  -webkit-user-select: @type;
+  -moz-user-select: @type;
+  -ms-user-select: @type;
+  user-select: @type;
+}

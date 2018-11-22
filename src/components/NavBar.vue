@@ -1,10 +1,12 @@
 <template>
     <nav>
-        <ul>
-            <li>{{ $t('login') }}</li>
+        <div class="logo">fsEdit|</div>
+        <ul class="menu">
+            <li><theme-selector></theme-selector></li>
+            <li><a href="#">{{ $t('settings') }}</a></li>
+            <li><a href="#">{{ $t('login') }}</a></li>
         </ul>
-        <locale-selector></locale-selector>
-        <theme-selector></theme-selector>
+        <!--<locale-selector></locale-selector>-->
     </nav>
 </template>
 
@@ -25,13 +27,28 @@
     @import "../theme/global";
 
     nav {
-        .theme({ background-color: @background-color; color: @color; });
-        //.theme();
-        height: 32px;
-        //color: @color;
+        .theme({ background-color: @background-color; color: @color; border-bottom-color: darken(@background-color, 20%);});
+        height: @nav-height;
+        border-bottom: 1px solid;
+        padding-right: 32px;
+        padding-left: 32px;
 
         & * {
             display: inline-block;
+            line-height: @nav-height;
+        }
+    }
+
+    .logo {
+        display: inline-block;
+        .logo-font();
+    }
+
+    .menu {
+        float: right;
+
+        & li {
+            margin-left: 16px;
         }
     }
 
