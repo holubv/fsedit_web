@@ -4,5 +4,9 @@
   "themes": {
     "light": "Light",
     "dark": "Dark"
+  },
+  "welcome": {
+    "title": "Welcome to",
+    "desc": "Start by typing, pasting or dropping files or folders"
   }
 }

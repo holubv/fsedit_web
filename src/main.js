@@ -9,7 +9,7 @@ Vue.prototype.$fsedit = new Vue({
     //reactive container
     data: {
         theme: null,
-        apiUrl: '',
+        apiUrl: 'http://localhost',
         token: null,
         pro: false
     },
