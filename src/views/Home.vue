@@ -29,7 +29,12 @@
                 window.console.log(this.$i18n)
             },
             onFileDrop(files) {
-                this.fileTree = files;
+
+                this.fileTree = null;
+                let _this = this;
+                this.$nextTick(function () {
+                    _this.fileTree = files;
+                })
             }
         },
         components: {
