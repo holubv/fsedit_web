@@ -11,6 +11,7 @@
     "debounce": "^1.2.0",
     "vue": "^2.5.17",
     "vue-i18n": "^8.3.2",
+    "vue-recaptcha": "^1.1.1",
     "vue-router": "^3.0.1",
     "vue2-dropzone": "^3.5.2"
   },

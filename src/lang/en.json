@@ -1,5 +1,14 @@
 {
   "login": "Login",
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "passwordAgain": "Password Again",
+    "switch": {
+      "register": "Not a Member yet?",
+      "login": "Already a Member?"
+    }
+  },
   "settings": "Settings",
   "themes": {
     "light": "Light",

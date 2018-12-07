@@ -26,6 +26,13 @@
         .font();
         margin: 0;
         overflow: hidden;
+
+        &.theme-dark {
+            background-color: @dark-background-color;
+        }
+        &.theme-light {
+            background-color: @light-background-color;
+        }
     }
 
     #app {
@@ -41,7 +48,7 @@
         cursor: pointer;
 
         padding: 4px 14px;
-        margin: 4px 4px;
+        margin: 4px 0;
 
         border: 1px solid;
         border-radius: 4px;

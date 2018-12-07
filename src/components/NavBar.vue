@@ -1,10 +1,14 @@
 <template>
     <nav>
-        <div class="logo">fsEdit|</div>
+        <div class="logo"><router-link :to="{ name: 'index'}">fsEdit|</router-link></div>
         <ul class="menu">
-            <li><theme-selector></theme-selector></li>
+            <li>
+                <theme-selector></theme-selector>
+            </li>
             <li><a href="#">{{ $t('settings') }}</a></li>
-            <li><a href="#">{{ $t('login') }}</a></li>
+            <li>
+                <router-link :to="{ name: 'login'}">{{ $t('login') }}</router-link>
+            </li>
         </ul>
         <!--<locale-selector></locale-selector>-->
     </nav>
@@ -27,7 +31,7 @@
     @import "../theme/global";
 
     nav {
-        .theme({ background-color: @background-color; color: @color; border-bottom-color: darken(@background-color, 20%);});
+        .theme({ background-color: @background-color; color: @color; border-bottom-color: darken(@background-color, 20%); });
         height: @nav-height;
         border-bottom: 1px solid;
         padding-right: 32px;
@@ -42,6 +46,11 @@
     .logo {
         display: inline-block;
         .logo-font();
+
+        & * {
+            .theme-color();
+            text-decoration: none;
+        }
     }
 
     .menu {

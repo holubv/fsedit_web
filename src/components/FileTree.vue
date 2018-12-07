@@ -22,7 +22,7 @@
         <ul class="root">
             <file-tree-item
                     class="item"
-                    v-for="(entry, index) in entries"
+                    v-for="(entry, index) in files"
                     :key="index"
                     :entry="entry">
             </file-tree-item>
@@ -79,7 +79,7 @@
         overflow: auto;
         border-right: 1px solid;
         .theme({
-            background-color: @background-color;
+            background-color: @content-background-color;
             border-color: darken(@background-color, 20%);
         });
     }

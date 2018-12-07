@@ -3,12 +3,14 @@
 @light-primary-color: #4b87c7;
 @light-danger-color: red;
 @light-background-color: #f2f2f2;
+@light-content-background-color: #ffffff;
 
 @dark-color: white;
 @dark-color-invert: black;
 @dark-primary-color: orange;
 @dark-danger-color: red;
 @dark-background-color: #3c3f41;
+@dark-content-background-color: #232525;
 
 
 .theme(@style) {
@@ -24,6 +26,7 @@
     @primary-color: @dark-primary-color;
     @danger-color: @dark-danger-color;
     @background-color: @dark-background-color;
+    @content-background-color: @dark-content-background-color;
 
     @style();
   }
@@ -36,6 +39,7 @@
     @primary-color: @light-primary-color;
     @danger-color: @light-danger-color;
     @background-color: @light-background-color;
+    @content-background-color: @light-content-background-color;
 
     @style();
   }
