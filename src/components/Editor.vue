@@ -1,7 +1,5 @@
 <template>
-    <editor-drop-zone class="container"
-                      @visibility="showWelcomeScreen = false"
-                      @drop="onFileDrop">
+    <div class="container">
 
         <ace v-model="editorContent"
              :dark-theme="$fsedit.theme === 'dark'"
@@ -15,12 +13,11 @@
         <footer>
             <span>test</span>
         </footer>
-    </editor-drop-zone>
+    </div>
 </template>
 
 <script>
     import Ace from './Ace'
-    import EditorDropZone from './EditorDropZone'
     import WelcomeScreen from './WelcomeScreen'
 
     export default {
@@ -39,8 +36,7 @@
         },
         components: {
             Ace,
-            WelcomeScreen,
-            EditorDropZone
+            WelcomeScreen
         },
         watch: {
             // '$fsedit.theme': function(t) {
@@ -62,9 +58,6 @@
         methods: {
             onEditorInput() {
                 this.showWelcomeScreen = false;
-            },
-            onFileDrop(files) {
-                this.$emit('fileDrop', files);
             },
             handleWindowResize() {
                 this.windowWidth = window.innerWidth;

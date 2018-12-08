@@ -1,34 +1,61 @@
 <template>
-    <div @dragover.prevent=""
-         @dragenter="dragOver">
+    <div @dragenter="dragOver">
 
         <slot><!-- slot content --></slot>
 
         <div class="drop-background" v-if="showDropInput"></div>
 
-        <input class="drop-input"
+        <!--<input class="drop-input"
                v-bind:class="{hidden: !showDropInput}"
                @drop="drop"
                @dragleave="dragLeave"
                type="file"
                multiple
                webkitdirectory
-               mozdirectory>
+               mozdirectory>-->
+
+        <vue2-drop-zone class="drop-zone"
+                        v-show="showDropInput"
+                        id="drop-zone"
+                        :options="dropZoneOptions"
+                        :includeStyling="false"
+                        @vdropzone-file-added="onFileAdded"
+                        @vdropzone-sending="onFileSending"
+        ></vue2-drop-zone>
+
     </div>
 </template>
 
 <script>
+
+    import Vue2DropZone from 'vue2-dropzone';
+    //import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+
     export default {
         name: 'EditorDropZone',
         data() {
             return {
-                showDropInput: false
+                showDropInput: false,
+                dropZoneOptions: {
+                    url: 'https://api.fsedit.cf/upload',
+                    method: 'post',
+                    createImageThumbnails: false,
+                    clickable: false,
+                    previewTemplate: this.dropZoneTemplate(),
+                    //todo maxFiles: 200
+                    //thumbnailWidth: 150,
+                    //maxFilesize: 0.5,
+                    //headers: { "My-Awesome-Header": "header value" }
+                }
             }
         },
         watch: {
             showDropInput(val) {
                 this.$emit('visibility', val);
             }
+        },
+        components: {
+            Vue2DropZone
         },
         methods: {
             dragOver() {
@@ -37,54 +64,40 @@
             dragLeave() {
                 this.showDropInput = false;
             },
-            handleWebkitEntry(entry, parent) {
-                let _this = this;
-                if (entry.isDirectory) {
-                    let children = [];
-                    let reader = entry.createReader();
-                    reader.readEntries(function (entries) {
-                        entries.forEach(function (ent) {
-                            _this.handleWebkitEntry(ent, children)
-                        });
-                    });
-                    parent.push({
-                        name: entry.name,
-                        type: 'directory',
-                        isFile: false,
-                        isDir: true,
-                        children: children
-                    });
-                } else if (entry.isFile) {
-                    parent.push({
-                        name: entry.name,
-                        type: 'file',
-                        isFile: true,
-                        isDir: false,
-                        entry: entry
-                    })
-                }
-            },
             drop(e) {
-
-                let files = [];
-
-                for (let file of e.dataTransfer.items) {
-                    let entry = file.webkitGetAsEntry();
-                    this.handleWebkitEntry(entry, files);
+                //
+                // console.log(files);
+                //
+                // this.showDropInput = false;
+                //
+                // this.$emit('drop', files);
+            },
+            onFileAdded(file) {
+                //console.log(file);
+            },
+            onFileSending(file, xhr, form) {
+                console.log(file);
+                let name = file.name;
+                if (file.fullPath) {
+                    name = file.fullPath;
                 }
-
-                console.log(files);
-
-                this.showDropInput = false;
-
-                this.$emit('drop', files);
-
-                // if (e.dataTransfer.items) {
-                //     e.dataTransfer.items.clear();
-                // } else {
-                //     e.dataTransfer.clearData();
-                // }
-            }
+                form.append('name', name);
+            },
+            dropZoneTemplate: function () {
+                return `<div class="dz-preview dz-file-preview">
+                <div class="dz-image">
+                    <div data-dz-thumbnail-bg></div>
+                </div>
+                <div class="dz-details">
+                    <div class="dz-size"><span data-dz-size></span></div>
+                    <div class="dz-filename"><span data-dz-name></span></div>
+                </div>
+                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                <div class="dz-success-mark"><i class="fa fa-check"></i></div>
+                <div class="dz-error-mark"><i class="fa fa-close"></i></div>
+            </div>`
+            },
         }
     }
 </script>
@@ -122,6 +135,7 @@
         left: 0;
         width: 100%;
         height: 100%;
+        z-index: 9999;
     }
 
 </style>
