@@ -3,7 +3,7 @@
 
         <ace v-model="editorContent"
              :dark-theme="$fsedit.theme === 'dark'"
-             lang="php"
+             lang="text"
              @input="onEditorInput"></ace>
 
         <div class="logo">fsEdit|</div>

@@ -5,15 +5,6 @@
 
         <div class="drop-background" v-if="showDropInput"></div>
 
-        <!--<input class="drop-input"
-               v-bind:class="{hidden: !showDropInput}"
-               @drop="drop"
-               @dragleave="dragLeave"
-               type="file"
-               multiple
-               webkitdirectory
-               mozdirectory>-->
-
         <vue2-drop-zone class="drop-zone"
                         v-show="showDropInput"
                         id="drop-zone"
@@ -21,6 +12,7 @@
                         :includeStyling="false"
                         @vdropzone-file-added="onFileAdded"
                         @vdropzone-sending="onFileSending"
+                        @vdropzone-queue-complete="() => this.showDropInput = false"
         ></vue2-drop-zone>
 
     </div>
@@ -42,6 +34,9 @@
                     createImageThumbnails: false,
                     clickable: false,
                     previewTemplate: this.dropZoneTemplate(),
+                    headers: {
+                        Accept: 'application/json'
+                    }
                     //todo maxFiles: 200
                     //thumbnailWidth: 150,
                     //maxFilesize: 0.5,
