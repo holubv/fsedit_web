@@ -3,7 +3,7 @@
 
         <ace v-model="editorContent"
              :dark-theme="$fsedit.theme === 'dark'"
-             lang="text"
+             :filename="filename"
              @input="onEditorInput"></ace>
 
         <div class="logo">fsEdit|</div>
@@ -11,7 +11,8 @@
         <welcome-screen ref="welcomeScreen" v-if="showWelcomeScreen"></welcome-screen>
 
         <footer>
-            <span>test</span>
+            <span style="float: left;">{{ filename }}</span> <!-- todo add proper css class -->
+            <span>{{ $route.params.workspace }}</span>
         </footer>
     </div>
 </template>
@@ -22,9 +23,13 @@
 
     export default {
         name: 'Editor',
+        props: {
+            data: Object
+        },
         data() {
             return {
                 editorContent: '',
+                filename: '',
                 dropZoneOptions: {
                     url: this.$fsedit.apiUrl,
                     clickable: false
@@ -39,13 +44,14 @@
             WelcomeScreen
         },
         watch: {
-            // '$fsedit.theme': function(t) {
-            //     this.changeTheme(t === 'dark');
-            // }
             windowWidth(width) {
                 if (width < 600) {
                     this.showWelcomeScreen = false;
                 }
+            },
+            data(data) {
+                this.editorContent = data.content;
+                this.filename = data.name;
             }
         },
         created() {

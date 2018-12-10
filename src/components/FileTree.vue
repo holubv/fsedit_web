@@ -4,9 +4,15 @@
         <draggable-tree :data="data" draggable="true" droppable="true" @change="onTreeChange">
             <div slot-scope="{data, store, vm}">
                 <template v-if="!data.isDragPlaceHolder">
-                    <b v-if="data.children && data.children.length"
-                       @click="store.toggleOpen(data)">{{data.open ? '-' : '+'}}</b>
-                    <span class="tree-item">{{data.text}}</span>
+                    <div v-if="data.file" @click="requestFileOpen(data)">
+                        <!-- File -->
+                        <span class="tree-item file">{{ data.name }}</span>
+                    </div>
+                    <div v-else @click="store.toggleOpen(data)">
+                        <!-- Folder -->
+                        <span class="folder-switch">{{ data.open ? '-' : '+' }}</span>
+                        <span class="tree-item folder">{{ data.name }}</span>
+                    </div>
                 </template>
             </div>
         </draggable-tree>
@@ -28,14 +34,7 @@
         },
         data() {
             return {
-                data: [
-                    {
-                        text: 'folder 1', children: [
-                            {text: 'file 4', droppable: false},
-                            {text: 'file 5', droppable: false},
-                        ]
-                    },
-                ]
+                data: []
             }
         },
         watch: {
@@ -53,14 +52,18 @@
             //     }
             //     return 1;
             // }
+            requestFileOpen(data) {
+                console.log(data);
+                this.$emit('file-open', data);
+            },
             addFolder() {
                 this.data.push({
-                    text: 'new folder'
+                    name: 'new folder'
                 });
             },
             addFile() {
                 this.data.push({
-                    text: 'new file',
+                    name: 'new file',
                     droppable: false
                 });
             },
@@ -122,5 +125,10 @@
         padding-left: 8px;
     }
 
+    .folder-switch {
+        width: 16px;
+        text-align: center;
+        display: inline-block;
+    }
 
 </style>

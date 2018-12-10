@@ -14,9 +14,9 @@
         name: 'Ace',
         props: {
             value: String,
-            lang: String,
             darkTheme: Boolean,
-            options: Object
+            options: Object,
+            filename: String
         },
         data: function () {
             return {
@@ -37,19 +37,30 @@
             }
         },
         watch: {
-            value: function (val) {
+            value(val) {
                 if (this.contentBackup !== val) {
                     this.editor.setValue(val, 1);
                     this.contentBackup = val;
                 }
             },
-            darkTheme: function (dark) {
+            darkTheme(dark) {
                 this.changeTheme(dark);
             },
-            lang: function (lang) {
-                this.changeLanguage(lang);
+            filename(filename) {
+                if (!filename) {
+                    this.changeLanguage('text');
+                    return;
+                }
+                //console.log(this.modes);
+                let mode = this.modes.getModeForPath(filename);
+                if (mode) {
+                    mode = mode.name;
+                } else {
+                    mode = 'text';
+                }
+                this.changeLanguage(mode);
             },
-            options: function (options) {
+            options(options) {
                 this.editor.setOptions(options);
             }
         },
@@ -59,7 +70,6 @@
         },
         mounted: function () {
             let _this = this;
-            let lang = this.lang || 'text';
 
             this.editor = ace.edit(this.$el);
             //this.$emit('init', this.editor);
@@ -67,7 +77,7 @@
             this.editor.$blockScrolling = Infinity;
 
             this.changeTheme(this.darkTheme);
-            this.changeLanguage(lang);
+            this.changeLanguage('text');
 
             this.editor.setValue(this.value, 1);
             this.contentBackup = this.value;

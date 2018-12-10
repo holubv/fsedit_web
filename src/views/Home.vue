@@ -2,9 +2,9 @@
     <div class="home editor-wrapper">
         <editor-drop-zone>
 
-            <file-tree class="file-tree"></file-tree>
+            <file-tree class="file-tree" :files="files" @file-open="loadFile"></file-tree>
 
-            <editor v-bind:class="{'file-tree-visible': showFileTree}"></editor>
+            <editor v-bind:class="{'file-tree-visible': showFileTree}" :data="editorData"></editor>
         </editor-drop-zone>
     </div>
 </template>
@@ -20,7 +20,11 @@
         name: 'home',
         data() {
             return {
-
+                files: [],
+                editorData: {
+                    content: '',
+                    name: ''
+                }
             }
         },
         computed: {
@@ -29,15 +33,50 @@
                 return true;
             }
         },
+        created() {
+            if (this.$route.params.workspace) {
+                this.loadWorkspace(this.$route.params.workspace);
+            }
+        },
         methods: {
-            test() {
-                window.console.log(this.$i18n)
+            loadWorkspace(workspace) {
+                //todo loading icon / spinner
+                this.$api.get('/workspace/' + workspace + '/structure')
+                    .then(rs => {
+                        //console.log(rs.data.children);
+                        this.files = rs.data;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        //todo show error dialog
+                    });
             },
-            onFileDrop(files) {
-
-            },
-
-
+            loadFile(file) {
+                //todo loading icon / spinner
+                //todo file cache
+                console.log(file.name);
+                this.$api.get('/file/' + file.file)
+                    .then(rs => {
+                        //console.log(rs.data.children);
+                        this.editorData = {
+                            content: rs.data,
+                            name: file.name
+                        };
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        //todo show error dialog
+                    });
+            }
+        },
+        watch: {
+            '$route': () => {
+                let workspace = this.$route.params.workspace;
+                if (!workspace) {
+                    return;
+                }
+                this.loadWorkspace(workspace);
+            }
         },
         components: {
             EditorDropZone,

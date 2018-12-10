@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "brace": "^0.11.1",
     "debounce": "^1.2.0",
     "vue": "^2.5.18",
