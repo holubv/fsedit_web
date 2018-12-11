@@ -1,5 +1,5 @@
 <template>
-    <div @dragenter="dragOver">
+    <div @dragenter="() => this.showDropInput = true">
 
         <slot><!-- slot content --></slot>
 
@@ -12,7 +12,7 @@
                         :includeStyling="false"
                         @vdropzone-file-added="onFileAdded"
                         @vdropzone-sending="onFileSending"
-                        @vdropzone-queue-complete="() => this.showDropInput = false"
+                        @vdropzone-queue-complete="onFileSendComplete"
         ></vue2-drop-zone>
 
     </div>
@@ -53,20 +53,6 @@
             Vue2DropZone
         },
         methods: {
-            dragOver() {
-                this.showDropInput = true;
-            },
-            dragLeave() {
-                this.showDropInput = false;
-            },
-            drop(e) {
-                //
-                // console.log(files);
-                //
-                // this.showDropInput = false;
-                //
-                // this.$emit('drop', files);
-            },
             onFileAdded(file) {
                 //console.log(file);
             },
@@ -77,6 +63,10 @@
                     name = file.fullPath;
                 }
                 form.append('name', name);
+            },
+            onFileSendComplete() {
+                this.showDropInput = false;
+                this.$emit('file-upload-done');
             },
             dropZoneTemplate: function () {
                 return `<div class="dz-preview dz-file-preview">

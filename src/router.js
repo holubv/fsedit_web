@@ -28,7 +28,7 @@ export default new Router({
             component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
         },
         {
-            path: '/:workspace',
+            path: '/:workspace/:filename*',
             name: 'show',
             component: Home
         },
