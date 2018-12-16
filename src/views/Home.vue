@@ -15,13 +15,12 @@
     import FileTree from '../components/FileTree';
     import EditorDropZone from '../components/EditorDropZone';
 
-
     export default {
         name: 'home',
         data() {
             return {
                 files: [],
-                workspace: '',
+                wsHash: '',
                 editorData: {
                     content: '',
                     name: ''
@@ -40,13 +39,13 @@
         },
         methods: {
             refreshWorkspace() {
-                this.loadWorkspace(this.workspace, true);
+                this.loadWorkspace(this.wsHash, true);
             },
             loadWorkspace(workspace, force) {
-                if (this.workspace === workspace && !force) {
+                if (this.wsHash === workspace && !force) {
                     return Promise.resolve(false);
                 }
-                this.workspace = workspace;
+                this.wsHash = workspace;
                 //todo loading icon / spinner
                 return this.$api.get('/workspace/' + workspace + '/structure')
                     .then(rs => {
@@ -65,7 +64,10 @@
                 //todo loading icon / spinner
                 //todo file cache
                 console.log(file.name);
-                this.$api.get('/file/' + file.file)
+                this.$api({
+                    url: '/file/' + file.file,
+                    transformResponse: [data => data]
+                })
                     .then(rs => {
 
                         this.editorData = {
@@ -77,7 +79,7 @@
                         if (this.showFileTree) {
                             path = `/${file.path.join('/')}`;
                         }
-                        this.$router.push({ path: `/${this.workspace}${path}` })
+                        this.$router.push({ path: `/${this.wsHash}${path}` })
                     })
                     .catch(err => {
                         console.error(err);

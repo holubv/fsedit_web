@@ -4,14 +4,20 @@
         <draggable-tree :data="data" draggable="true" droppable="true" @change="onTreeChange">
             <div slot-scope="{data, store, vm}">
                 <template v-if="!data.isDragPlaceHolder">
-                    <div v-if="data.file" @click="requestFileOpen(data)">
-                        <!-- File -->
-                        <span class="tree-item file">{{ data.name }}</span>
-                    </div>
-                    <div v-else @click="store.toggleOpen(data)">
-                        <!-- Folder -->
-                        <span class="folder-switch">{{ data.open ? '-' : '+' }}</span>
-                        <span class="tree-item folder">{{ data.name }}</span>
+                    <div class="tree-entry">
+                        <div v-if="data.file" @click="requestFileOpen(data)">
+                            <!-- File -->
+                            <i class="far fa-file"></i>
+                            <span class="tree-item file-name">{{ data.name }}</span>
+                        </div>
+                        <div v-else @click="store.toggleOpen(data)">
+                            <!-- Folder -->
+
+                            <i v-if="data.open" class="far fa-folder-open"></i>
+                            <i v-else class="far fa-folder"></i>
+
+                            <span class="tree-item folder-name">{{ data.name }}</span>
+                        </div>
                     </div>
                 </template>
             </div>
@@ -30,7 +36,8 @@
     export default {
         name: 'FileTree',
         props: {
-            files: Array
+            files: Array,
+            activeFileId: 0
         },
         data() {
             return {
@@ -80,17 +87,11 @@
 
 <style lang="less">
     .he-tree {
-        border: 1px solid #ccc;
         padding-bottom: 120px;
+        display: inline-block;
     }
 
     .tree-node {
-    }
-
-    .tree-node-inner {
-        padding: 5px;
-        border: 1px solid #ccc;
-        cursor: pointer;
     }
 
     .tree-node-inner-back {
@@ -129,6 +130,21 @@
         width: 16px;
         text-align: center;
         display: inline-block;
+    }
+
+    .far, .fas {
+        width: 16px;
+        margin-right: 6px;
+    }
+
+    .active {
+        background-color: red;
+    }
+
+    .tree-entry {
+        padding: 4px 0 4px 4px;
+        cursor: pointer;
+        white-space: nowrap;
     }
 
 </style>
