@@ -23,7 +23,10 @@ Vue.prototype.$fsedit = new Vue({
 });
 Vue.prototype.$api = Axios.create({
     baseURL: apiUrl,
-    timeout: 6000
+    timeout: 6000,
+    // headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded'
+    // }
 });
 
 new Vue({

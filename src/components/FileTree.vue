@@ -1,10 +1,15 @@
 <template>
     <div>
 
+        <div class="add-panel">
+            <button class="btn btn-add-folder" @click.prevent="addFolder"><i class="fas fa-folder-plus"></i>Add folder</button>
+            <button class="btn btn-add-file" @click.prevent="addFile"><i class="fas fa-file-medical"></i>Add file</button>
+        </div>
+
         <draggable-tree :data="data" draggable="true" droppable="true" @change="onTreeChange">
             <div slot-scope="{data, store, vm}">
                 <template v-if="!data.isDragPlaceHolder">
-                    <div class="tree-entry">
+                    <div class="tree-entry" v-bind:class="{active: activeFileId === data.id}">
                         <div v-if="data.file" @click="requestFileOpen(data)">
                             <!-- File -->
                             <i class="far fa-file"></i>
@@ -22,9 +27,6 @@
                 </template>
             </div>
         </draggable-tree>
-
-        <button @click.prevent="addFolder">Add Folder</button>
-        <button @click.prevent="addFile">Add File</button>
 
     </div>
 </template>
@@ -60,19 +62,17 @@
             //     return 1;
             // }
             requestFileOpen(data) {
+                if (data.id === this.activeFileId) {
+                    return;
+                }
                 console.log(data);
                 this.$emit('file-open', data);
             },
             addFolder() {
-                this.data.push({
-                    name: 'new folder'
-                });
+                this.$emit('add-folder');
             },
             addFile() {
-                this.data.push({
-                    name: 'new file',
-                    droppable: false
-                });
+                this.$emit('add-file');
             },
             onTreeChange(node, targetTree) {
                 console.log(node);
@@ -89,6 +89,7 @@
     .he-tree {
         padding-bottom: 120px;
         display: inline-block;
+        width: 100%;
     }
 
     .tree-node {
@@ -138,7 +139,18 @@
     }
 
     .active {
-        background-color: red;
+        //background-color: red;
+        .theme({
+            background-color: @primary-color;
+            color: @color-invert;
+        });
+        font-weight: bold;
+    }
+
+    .add-panel button {
+        margin-right: 5px;
+        margin-left: 5px;
+        display: inline-block;
     }
 
     .tree-entry {

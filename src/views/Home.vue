@@ -1,8 +1,15 @@
 <template>
     <div class="home editor-wrapper">
-        <editor-drop-zone @file-upload-done="refreshWorkspace">
+        <editor-drop-zone @file-upload-done="refreshWorkspace" :workspace-hash="wsHash">
 
-            <file-tree v-show="showFileTree" class="file-tree" :files="files" @file-open="openFile"></file-tree>
+            <file-tree v-show="showFileTree"
+                       class="file-tree"
+                       :files="files"
+                       @file-open="openFile"
+                       @add-folder="addNode(true)"
+                       @add-file="addNode(false)"
+                       :active-file-id="activeFile ? activeFile.id : 0"
+            ></file-tree>
 
             <editor v-bind:class="{'file-tree-visible': showFileTree}" :data="editorData"></editor>
         </editor-drop-zone>
@@ -24,7 +31,8 @@
                 editorData: {
                     content: '',
                     name: ''
-                }
+                },
+                activeFile: null
             }
         },
         computed: {
@@ -38,6 +46,15 @@
             });
         },
         methods: {
+            clearWorkspace() {
+                this.files = [];
+                this.wsHash = '';
+                this.editorData = {
+                    content: '',
+                    name: ''
+                };
+                this.activeFile = null;
+            },
             refreshWorkspace() {
                 this.loadWorkspace(this.wsHash, true);
             },
@@ -74,12 +91,32 @@
                             content: rs.data,
                             name: file.name
                         };
+                        this.activeFile = file;
 
                         let path = '';
                         if (this.showFileTree) {
                             path = `/${file.path.join('/')}`;
                         }
-                        this.$router.push({ path: `/${this.wsHash}${path}` })
+                        this.$router.push({path: `/${this.wsHash}${path}`})
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        //todo show error dialog
+                    });
+            },
+            addNode(isFolder) {
+                let name = window.prompt('Folder/file name') || 'unnamed';
+                let parent = 0;
+                if (this.activeFile && this.activeFile.parent_id) {
+                    parent = this.activeFile.parent_id;
+                }
+                return this.$api({
+                    url: '/files/create',
+                    method: 'put',
+                    params: {'folder': isFolder ? 'true' : 'false', name, parent}
+                })
+                    .then(rs => {
+                        this.refreshWorkspace();
                     })
                     .catch(err => {
                         console.error(err);
@@ -129,9 +166,12 @@
             }
         },
         watch: {
-            // '$route': () => {
-            //     //this.processRoute();
-            // }
+            '$route': function (route) {
+                console.log(route);
+                if (route.name === 'index') {
+                    this.clearWorkspace();
+                }
+            }
         },
         components: {
             EditorDropZone,

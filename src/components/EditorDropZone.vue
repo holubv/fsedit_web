@@ -29,7 +29,7 @@
             return {
                 showDropInput: false,
                 dropZoneOptions: {
-                    url: 'https://api.fsedit.cf/upload',
+                    url: 'https://api.fsedit.cf/files/upload',
                     method: 'post',
                     createImageThumbnails: false,
                     clickable: false,
