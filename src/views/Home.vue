@@ -37,7 +37,12 @@
         },
         computed: {
             showFileTree() {
-                return this.files && this.files.length > 1;
+                //show file tree only if there are more files
+                //in workspace or only item is a folder
+                if (!this.files || !this.files.length) {
+                    return false;
+                }
+                return !(this.files.length === 1 && this.files[0].file);
             }
         },
         beforeRouteEnter(to, from, next) {
@@ -69,7 +74,10 @@
                         //console.log(rs.data.children);
                         this.files = rs.data;
                         if (this.files.length === 1) {
-                            this.openFile(this.files[0]);
+                            let node = this.files[0];
+                            if (node.file) {
+                                this.openFile(node);
+                            }
                         }
                     })
                     .catch(err => {
