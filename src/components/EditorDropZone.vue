@@ -10,6 +10,7 @@
                         id="drop-zone"
                         :options="dropZoneOptions"
                         :includeStyling="false"
+                        ref="dropZone"
                         @vdropzone-file-added="onFileAdded"
                         @vdropzone-sending="onFileSending"
                         @vdropzone-queue-complete="onFileSendComplete"
@@ -25,6 +26,9 @@
 
     export default {
         name: 'EditorDropZone',
+        props: {
+            workspaceHash: String
+        },
         data() {
             return {
                 showDropInput: false,
@@ -36,7 +40,8 @@
                     previewTemplate: this.dropZoneTemplate(),
                     headers: {
                         Accept: 'application/json'
-                    }
+                    },
+                    autoProcessQueue: false,
                     //todo maxFiles: 200
                     //thumbnailWidth: 150,
                     //maxFilesize: 0.5,
@@ -47,6 +52,13 @@
         watch: {
             showDropInput(val) {
                 this.$emit('visibility', val);
+            },
+            workspaceHash(val) {
+                if (val) {
+                    this.$nextTick(() => {
+                        this.$refs.dropZone.processQueue();
+                    });
+                }
             }
         },
         components: {
@@ -54,7 +66,13 @@
         },
         methods: {
             onFileAdded(file) {
-                //console.log(file);
+                if (this.workspaceHash) {
+                    this.$nextTick(() => {
+                        this.$refs.dropZone.processQueue();
+                    });
+                    return;
+                }
+                this.$emit('undefined-workspace-hash');
             },
             onFileSending(file, xhr, form) {
                 console.log(file);
@@ -63,6 +81,7 @@
                     name = file.fullPath;
                 }
                 form.append('name', name);
+                form.append('workspace', this.workspaceHash);
             },
             onFileSendComplete() {
                 this.showDropInput = false;
