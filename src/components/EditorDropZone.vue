@@ -46,7 +46,8 @@
                     //thumbnailWidth: 150,
                     //maxFilesize: 0.5,
                     //headers: { "My-Awesome-Header": "header value" }
-                }
+                },
+                wsRequested: false
             }
         },
         watch: {
@@ -54,6 +55,7 @@
                 this.$emit('visibility', val);
             },
             workspaceHash(val) {
+                this.wsRequested = false;
                 if (val) {
                     this.$nextTick(() => {
                         this.$refs.dropZone.processQueue();
@@ -72,6 +74,10 @@
                     });
                     return;
                 }
+                if (this.wsRequested) {
+                    return;
+                }
+                this.wsRequested = true;
                 this.$emit('undefined-workspace-hash');
             },
             onFileSending(file, xhr, form) {

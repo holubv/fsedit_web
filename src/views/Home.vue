@@ -1,19 +1,25 @@
 <template>
     <div class="home editor-wrapper">
-        <editor-drop-zone @file-upload-done="refreshWorkspace"
-                          @undefined-workspace-hash="createWorkspace"
+        <editor-drop-zone @file-upload-done="onFileUploadDone"
+                          @undefined-workspace-hash="onUndefinedWorkspace"
                           :workspaceHash="wsHash">
 
             <file-tree v-show="showFileTree"
                        class="file-tree"
                        :files="treeItems"
-                       @file-open="openFile"
-                       @add-folder="addNode(true)"
-                       @add-file="addNode(false)"
+                       @file-open="onFileOpen"
+                       @add-folder="onAddItem(true)"
+                       @add-file="onAddItem(false)"
                        :active-file-id="activeFile ? activeFile.id : 0"
             ></file-tree>
 
-            <editor v-bind:class="{'file-tree-visible': showFileTree}" :data="editorData"></editor>
+            <editor v-bind:class="{'file-tree-visible': showFileTree}"
+                    :content="editorContent"
+                    :file="activeFile"
+                    :auto-save="autoSave"
+                    @inactive="onEditorInactive"
+            ></editor>
+
         </editor-drop-zone>
     </div>
 </template>
@@ -29,14 +35,10 @@
         name: 'home',
         data() {
             return {
-                //files: [],
-                //wsHash: '',
                 workspace: null,
-                editorData: {
-                    content: '',
-                    name: ''
-                },
-                activeFile: null
+                editorContent: null,
+                activeFile: null,
+                autoSave: true
             }
         },
         computed: {
@@ -69,18 +71,28 @@
         },
         methods: {
             clearWorkspace() {
+                this.autoSave = false;
+                this.editorContent = '';
                 this.workspace = null;
-                this.editorData = {
-                    content: '',
-                    name: ''
-                };
                 this.activeFile = null;
+                this.$nextTick(() => {
+                    this.autoSave = true;
+                })
             },
+            /**
+             *
+             * @returns {Promise}
+             */
             refreshWorkspace() {
                 return this.loadWorkspace(this.workspace.hash, true);
             },
+            /**
+             *
+             * @param {string} wsHash
+             * @param {boolean} [force]
+             * @returns {Promise}
+             */
             loadWorkspace(wsHash, force) {
-
                 if (!this.workspace || this.workspace.hash !== wsHash) {
                     this.workspace = new Workspace(wsHash);
                 } else if (this.workspace.hash === wsHash && !force) {
@@ -95,74 +107,135 @@
                             this.openFile(node);
                         }
                     }
-                }).catch(err => {
+                });
+            },
+            /**
+             *
+             * @param {Object} file
+             * @returns {Promise}
+             */
+            openFile(file) {
+                //todo loading icon / spinner
+                this.autoSave = false;
+                return this.workspace.loadFileContent(file).then(content => {
+                    this.editorContent = content;
+                    this.activeFile = file;
+
+                    let path = '';
+                    if (this.showFileTree) {
+                        path = `/${file.path.join('/')}`;
+                    }
+                    this.$router.push({path: `/${this.workspace.hash}${path}`});
+                    this.$nextTick(() => {
+                        this.autoSave = true;
+                    });
+                });
+            },
+            /**
+             *
+             * @returns {Promise<Workspace>}
+             */
+            createWorkspace() {
+                return new Workspace().create().then(ws => {
+                    this.workspace = ws;
+                    this.$router.push({path: `/${this.workspace.hash}`});
+                    return this.workspace;
+                });
+            },
+            /**
+             *
+             * @param {string} name
+             * @param {boolean} [folder]
+             * @param {boolean} [noRefresh]
+             * @returns {Promise<Object>}
+             */
+            addItem(name, folder, noRefresh) {
+                let promise = this.workspace.addItem(name, !!folder, this.activeFile);
+                if (!noRefresh) {
+                    return promise.then(file => {
+                        return this.refreshWorkspace().then(() => file);
+                    });
+                }
+                return promise;
+            },
+            /**
+             *
+             * @returns {Promise<Workspace>}
+             */
+            getWorkspace() {
+                if (this.workspace) {
+                    return Promise.resolve(this.workspace);
+                }
+                return this.createWorkspace();
+            },
+
+            processRoute() {
+                if (this.$route.params.workspace) {
+                    this.loadWorkspace(this.$route.params.workspace).then(() => {
+                        let filename = this.$route.params.filename;
+                        if (filename) {
+                            let file = this.workspace.findFile(filename);
+                            if (file) {
+                                return this.openFile(file);
+                            }
+                            return Promise.resolve(false);
+                        }
+                    }).catch(() => {
+                        console.log('reset route');
+                        this.$router.replace({name: 'index'});
+                        //todo show dialog
+                    });
+                }
+            },
+            onFileUploadDone() {
+                this.refreshWorkspace().catch(err => {
                     console.error(err);
                     //todo show error dialog
                 });
             },
-            openFile(file) {
-                //todo loading icon / spinner
-                //todo file cache
-                console.log(file.name);
-                this.$api({
-                    url: '/file/' + file.file,
-                    transformResponse: [data => data]
-                })
-                    .then(rs => {
-
-                        this.editorData = {
-                            content: rs.data,
-                            name: file.name
-                        };
-                        this.activeFile = file;
-
-                        let path = '';
-                        if (this.showFileTree) {
-                            path = `/${file.path.join('/')}`;
+            onAddItem(folder) {
+                let name = window.prompt('Enter folder/file name:') || 'unnamed.txt';
+                this.addItem(name, folder).catch(err => {
+                    console.error(err);
+                    //todo show error dialog
+                });
+            },
+            onUndefinedWorkspace() {
+                this.createWorkspace().catch(err => {
+                    console.error(err);
+                    //todo show error dialog
+                });
+            },
+            onFileOpen(file) {
+                this.openFile(file).catch(err => {
+                    console.error(err);
+                    //todo show error dialog
+                });
+            },
+            onEditorInactive({file, content}) {
+                this.getWorkspace()
+                    .then(workspace => {
+                        if (file) {
+                            return Promise.resolve({workspace, f: file});
+                        } else {
+                            return this.addItem('unnamed.txt', false, true).then(f => ({workspace, f}));
                         }
-                        this.$router.push({path: `/${this.workspace.hash}${path}`})
+                    })
+                    .then(({workspace, f}) => workspace.saveFileContent(f, content))
+                    .then(() => {
+                        if (!file) {
+                            return this.refreshWorkspace();
+                        }
+                        //todo change file saved indicator
                     })
                     .catch(err => {
                         console.error(err);
                         //todo show error dialog
                     });
             },
-            createWorkspace() {
-                return new Workspace().create().then(ws => {
-                    this.workspace = ws;
-                    this.$router.push({path: `/${this.workspace.hash}`});
-                }).catch(err => {
-                    console.error(err);
-                    //todo show error dialog
-                });
-            },
-            addNode(isFolder) {
-                let name = window.prompt('Folder/file name') || 'unnamed';
-                return this.workspace.addItem(name, isFolder, this.activeFile).then(rs => {
-                    this.refreshWorkspace();
-                }).catch(err => {
-                    console.error(err);
-                    //todo show error dialog
-                });
-            },
-            processRoute() {
-                if (this.$route.params.workspace) {
-                    let promise = this.loadWorkspace(this.$route.params.workspace);
-                    let filename = this.$route.params.filename;
-                    if (filename) {
-                        promise.then(() => {
-                            let file = this.workspace.findFile(filename);
-                            if (file) {
-                                this.openFile(file);
-                            }
-                        });
-                    }
-                }
-            },
         },
         watch: {
             '$route': function (route) {
-                console.log(route);
                 if (route.name === 'index') {
                     this.clearWorkspace();
                 }

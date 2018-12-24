@@ -65,7 +65,6 @@
                 if (data.id === this.activeFileId) {
                     return;
                 }
-                console.log(data);
                 this.$emit('file-open', data);
             },
             addFolder() {

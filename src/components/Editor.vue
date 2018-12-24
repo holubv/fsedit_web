@@ -20,21 +20,19 @@
 <script>
     import Ace from './Ace'
     import WelcomeScreen from './WelcomeScreen'
+    import debounce from 'es6-promise-debounce'
 
     export default {
         name: 'Editor',
         props: {
-            data: Object
+            file: Object,
+            content: String,
+            autoSave: Boolean
         },
         data() {
             return {
                 editorContent: '',
                 filename: '',
-                dropZoneOptions: {
-                    url: this.$fsedit.apiUrl,
-                    clickable: false
-                },
-                dropInputHidden: true,
                 showWelcomeScreen: true,
                 windowWidth: 0
             }
@@ -49,9 +47,11 @@
                     this.showWelcomeScreen = false;
                 }
             },
-            data(data) {
-                this.editorContent = data.content;
-                this.filename = data.name;
+            file(f) {
+                this.filename = f ? f.name : '';
+            },
+            content(c) {
+                this.editorContent = c || '';
             }
         },
         created() {
@@ -64,10 +64,21 @@
         methods: {
             onEditorInput() {
                 this.showWelcomeScreen = false;
+                if (this.autoSave) {
+                    let file = this.file;
+                    let content = this.editorContent;
+
+                    this.debounced().then(() => {
+                        this.$emit('inactive', {file, content});
+                    });
+                }
             },
             handleWindowResize() {
                 this.windowWidth = window.innerWidth;
-            }
+            },
+            debounced: debounce(() => {
+                return Promise.resolve(null);
+            }, 2000)
         }
     }
 </script>

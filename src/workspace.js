@@ -1,13 +1,40 @@
 import Vue from 'vue'
+import LRUCache from 'lru-cache'
 
 export default class Workspace {
     /**
      *
-     * @param {string} hash
+     * @param {string} [hash]
      */
     constructor(hash) {
         this.hash = hash;
         this.items = [];
+        this.fileCache = new LRUCache({
+            max: 20,
+            maxAge: 10 * 60 * 1000 //10 minutes
+        });
+    }
+
+    /**
+     *
+     * @param {Object} item
+     * @param {boolean} [ignoreCache]
+     * @returns {Promise}
+     */
+    loadFileContent(item, ignoreCache) {
+        if (!ignoreCache && this.fileCache.has(item.file)) {
+            return Promise.resolve(this.fileCache.get(item.file));
+        }
+        return Vue.prototype.$api({
+            url: '/file/' + item.file,
+            transformResponse: [data => data],
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
+        }).then(rs => {
+            this.fileCache.set(item.file, rs.data);
+            return rs.data;
+        });
     }
 
     /**
@@ -65,7 +92,7 @@ export default class Workspace {
             url: '/files/create',
             method: 'put',
             params: {'folder': folder ? 'true' : 'false', name, parent, workspace: this.hash}
-        });
+        }).then(rs => rs.data);
         //todo add item to this.items or refreshWorkspace?
     }
 
@@ -99,5 +126,23 @@ export default class Workspace {
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @param {Object} file
+     * @param {string} content
+     * @returns {Promise}
+     */
+    saveFileContent(file, content) {
+        return Vue.prototype.$api({
+            url: '/files/edit',
+            method: 'put',
+            params: {workspace: this.hash, file: file.id},
+            headers: {'Content-Type': 'text/plain'},
+            data: content
+        }).then(() => {
+            this.fileCache.set(file.file, content);
+        });
     }
 }

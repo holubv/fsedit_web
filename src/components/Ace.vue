@@ -100,7 +100,7 @@
                 tooltipFollowsMouse: false,
                 animatedScroll: false,
                 vScrollBarAlwaysVisible: false,
-                fixedWidthGutter: false,
+                fixedWidthGutter: true,
                 dragEnabled: false,
                 useWorker: false,
                 //theme: 'ace/theme/intellij'
