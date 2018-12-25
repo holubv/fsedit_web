@@ -1,15 +1,28 @@
 <template>
     <div>
 
-        <div class="add-panel">
-            <button class="btn btn-add-folder" @click.prevent="addFolder"><i class="fas fa-folder-plus"></i>Add folder</button>
-            <button class="btn btn-add-file" @click.prevent="addFile"><i class="fas fa-file-medical"></i>Add file</button>
+        <div v-if="editable" class="add-panel">
+            <button class="btn btn-add-folder" @click.prevent="addFolder">
+                <i class="fas fa-folder-plus"></i>Add folder
+            </button>
+            <button class="btn btn-add-file" @click.prevent="addFile">
+                <i class="fas fa-file-medical"></i>Add file
+            </button>
         </div>
 
-        <draggable-tree :data="data" draggable="true" droppable="true" @change="onTreeChange">
+        <draggable-tree :data="data"
+                        draggable="true"
+                        droppable="true"
+                        @change="onTreeChange"
+                        :ondragstart="onDragStart">
+
             <div slot-scope="{data, store, vm}">
                 <template v-if="!data.isDragPlaceHolder">
-                    <div class="tree-entry" v-bind:class="{active: activeFileId === data.id}">
+                    <div class="tree-entry"
+                         v-bind:class="{active: activeFileId === data.id}"
+                         tabindex="-1"
+                         @keyup.delete.prevent="requestDelete(data)">
+
                         <div v-if="data.file" @click="requestFileOpen(data)">
                             <!-- File -->
                             <i class="far fa-file"></i>
@@ -39,7 +52,8 @@
         name: 'FileTree',
         props: {
             files: Array,
-            activeFileId: 0
+            activeFileId: 0,
+            editable: true
         },
         data() {
             return {
@@ -52,26 +66,26 @@
             }
         },
         methods: {
-            // compareFiles(a, b) {
-            //     if (a.isDir && b.isDir || a.isFile && b.isFile) {
-            //         return a.name.localeCompare(b.name);
-            //     }
-            //     if (a.isDir && b.isFile) {
-            //         return -1;
-            //     }
-            //     return 1;
-            // }
+            requestDelete(data) {
+                if (this.editable) {
+                    this.$emit('delete-file', data);
+                }
+            },
             requestFileOpen(data) {
                 if (data.id === this.activeFileId) {
                     return;
                 }
-                this.$emit('file-open', data);
+                this.$emit('open-file', data);
             },
             addFolder() {
-                this.$emit('add-folder');
+                if (this.editable) {
+                    this.$emit('add-folder');
+                }
             },
             addFile() {
-                this.$emit('add-file');
+                if (this.editable) {
+                    this.$emit('add-file');
+                }
             },
             onTreeChange(node) {
                 let parent = null;
@@ -82,6 +96,9 @@
                     item: node,
                     parent
                 });
+            },
+            onDragStart() {
+                return this.editable; //prevent drag when not editable
             },
         },
         components: {
@@ -145,10 +162,7 @@
 
     .active {
         //background-color: red;
-        .theme({
-            background-color: @primary-color;
-            color: @color-invert;
-        });
+        .theme({ background-color: @primary-color; color: @color-invert; });
         font-weight: bold;
     }
 

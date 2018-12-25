@@ -4,14 +4,34 @@ import LRUCache from 'lru-cache'
 export default class Workspace {
     /**
      *
-     * @param {string} [hash]
+     * @param {string} hash
      */
     constructor(hash) {
+        /** @var {string} */
         this.hash = hash;
+        /** @var {?string} */
+        this.editToken = null;
+        /** @var {Object[]} */
         this.items = [];
+        /** @var {LRUCache} */
         this.fileCache = new LRUCache({
             max: 20,
             maxAge: 10 * 60 * 1000 //10 minutes
+        });
+    }
+
+    /**
+     *
+     * @returns {Promise<Workspace>}
+     */
+    static create() {
+        return Vue.prototype.$api({
+            url: '/workspaces/create',
+            method: 'post'
+        }).then(rs => {
+            let workspace = new Workspace(rs.data.hash);
+            workspace.editToken = rs.data.editToken;
+            return workspace;
         });
     }
 
@@ -39,24 +59,10 @@ export default class Workspace {
 
     /**
      *
-     * @returns {Promise<Workspace>}
-     */
-    create() {
-        return Vue.prototype.$api({
-            url: '/workspaces/create',
-            method: 'post'
-        }).then(rs => {
-            this.hash = rs.data.hash;
-            return this;
-        });
-    }
-
-    /**
-     *
      * @returns {boolean}
      */
     hasItems() {
-        return this.items && this.items.length;
+        return !!(this.items && this.items.length);
     }
 
     /**
@@ -64,7 +70,7 @@ export default class Workspace {
      * @returns {Promise<Workspace>}
      */
     loadStructure() {
-        return Vue.prototype.$api.get('/workspace/' + this.hash + '/structure').then(rs => {
+        return Vue.prototype.$api.get('/workspace/' + this.hash).then(rs => {
             //console.log(rs.data.children);
             this.items = rs.data;
             return this;
@@ -166,6 +172,6 @@ export default class Workspace {
      */
     canEdit() {
         //todo check edit token and timestamp
-        return true;
+        return !!this.editToken;
     }
 }

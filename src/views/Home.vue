@@ -7,7 +7,8 @@
             <file-tree v-show="showFileTree"
                        class="file-tree"
                        :files="treeItems"
-                       @file-open="onFileOpen"
+                       :editable="editable"
+                       @open-file="onFileOpen"
                        @add-folder="onAddItem(true)"
                        @add-file="onAddItem(false)"
                        @move-item="onItemMove"
@@ -148,7 +149,7 @@
              * @returns {Promise<Workspace>}
              */
             createWorkspace() {
-                return new Workspace().create().then(ws => {
+                return Workspace.create().then(ws => {
                     this.workspace = ws;
                     this.$router.push({path: `/${this.workspace.hash}`});
                     return this.workspace;
@@ -214,7 +215,10 @@
                 });
             },
             onAddItem(folder) {
-                let name = window.prompt('Enter folder/file name:') || 'unnamed.txt';
+                let name = window.prompt('Enter folder/file name:');
+                if (!name) {
+                    return;
+                }
                 this.addItem(name, folder).catch(err => {
                     console.error(err);
                     //todo show error dialog
