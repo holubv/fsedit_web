@@ -10,6 +10,7 @@
                        @file-open="onFileOpen"
                        @add-folder="onAddItem(true)"
                        @add-file="onAddItem(false)"
+                       @move-item="onItemMove"
                        :active-file-id="activeFile ? activeFile.id : 0"
             ></file-tree>
 
@@ -17,6 +18,7 @@
                     :content="editorContent"
                     :file="activeFile"
                     :auto-save="autoSave"
+                    :editable="editable"
                     @inactive="onEditorInactive"
             ></editor>
 
@@ -35,10 +37,14 @@
         name: 'home',
         data() {
             return {
+                /** @var {?Workspace} workspace */
                 workspace: null,
+                /** @var {?string} editorContent */
                 editorContent: null,
+                /** @var {?Object} activeFile */
                 activeFile: null,
-                autoSave: true
+                /** @var {boolean} autoSave */
+                autoSave: true,
             }
         },
         computed: {
@@ -62,6 +68,12 @@
                     return [];
                 }
                 return this.workspace.items;
+            },
+            editable() {
+                if (!this.workspace) {
+                    return true;
+                }
+                return this.workspace.canEdit();
             }
         },
         beforeRouteEnter(to, from, next) {
@@ -183,9 +195,17 @@
                     }).catch(() => {
                         console.log('reset route');
                         this.$router.replace({name: 'index'});
-                        //todo show dialog
+                        //todo show error dialog
                     });
                 }
+            },
+            onItemMove({item, parent}) {
+                this.workspace.moveItem(item, parent)
+                    .then(() => this.refreshWorkspace())
+                    .catch(err => {
+                        console.error(err);
+                        //todo show error dialog
+                    });
             },
             onFileUploadDone() {
                 this.refreshWorkspace().catch(err => {

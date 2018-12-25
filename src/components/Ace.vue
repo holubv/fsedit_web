@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%; height: 100%;"></div>
+    <div style="width: 100%; height: 100%;" class="ace_editor ace-darkula ace_dark"></div>
 </template>
 
 <script>
@@ -15,14 +15,29 @@
         props: {
             value: String,
             darkTheme: Boolean,
-            options: Object,
-            filename: String
+            filename: String,
+            editable: Boolean
         },
         data: function () {
             return {
+                /** @var {?AceAjax.Editor} editor */
                 editor: null,
                 contentBackup: '',
-                modes: null
+                modes: null,
+                options: {
+                    useSoftTabs: true,
+                    highlightSelectedWord: true,
+                    printMarginColumn: 120,
+                    showFoldWidgets: false,
+                    showInvisibles: false,
+                    tooltipFollowsMouse: false,
+                    animatedScroll: false,
+                    vScrollBarAlwaysVisible: false,
+                    fixedWidthGutter: true,
+                    dragEnabled: false,
+                    useWorker: false,
+                    readOnly: false,
+                }
             }
         },
         methods: {
@@ -60,6 +75,10 @@
                 }
                 this.changeLanguage(mode);
             },
+            editable(editable) {
+                this.options.readonly = !editable;
+                this.editor.setOption('readOnly', !editable);
+            },
             options(options) {
                 this.editor.setOptions(options);
             }
@@ -91,20 +110,7 @@
             // if (this.options) {
             //     this.editor.setOptions(this.options);
             // }
-            this.editor.setOptions({
-                useSoftTabs: true,
-                highlightSelectedWord: true,
-                printMarginColumn: 120,
-                showFoldWidgets: false,
-                showInvisibles: false,
-                tooltipFollowsMouse: false,
-                animatedScroll: false,
-                vScrollBarAlwaysVisible: false,
-                fixedWidthGutter: true,
-                dragEnabled: false,
-                useWorker: false,
-                //theme: 'ace/theme/intellij'
-            });
+            this.editor.setOptions(this.options);
             this.editor.focus();
 
             this.modes = ace.acequire('ace/ext/modelist');

@@ -98,6 +98,20 @@ export default class Workspace {
 
     /**
      *
+     * @param {Object} item
+     * @param {Object} [parent]
+     * @returns {Promise}
+     */
+    moveItem(item, parent) {
+        return Vue.prototype.$api({
+            url: '/files/move',
+            method: 'put',
+            params: {id: item.id, parent: parent ? parent.id : 0, workspace: this.hash}
+        });
+    }
+
+    /**
+     *
      * @param {string} path
      * @returns {Object|null}
      */
@@ -144,5 +158,14 @@ export default class Workspace {
         }).then(() => {
             this.fileCache.set(file.file, content);
         });
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    canEdit() {
+        //todo check edit token and timestamp
+        return true;
     }
 }

@@ -4,6 +4,8 @@
         <ace v-model="editorContent"
              :dark-theme="$fsedit.theme === 'dark'"
              :filename="filename"
+             :editable="editable"
+             :class="{'read-only': !editable}"
              @input="onEditorInput"></ace>
 
         <div class="logo">fsEdit|</div>
@@ -27,7 +29,8 @@
         props: {
             file: Object,
             content: String,
-            autoSave: Boolean
+            autoSave: Boolean,
+            editable: Boolean,
         },
         data() {
             return {
@@ -82,6 +85,12 @@
         }
     }
 </script>
+
+<style>
+    .ace_editor.read-only .ace_cursor {
+        visibility: hidden!important;
+    }
+</style>
 
 <style scoped lang="less">
     @import "../theme/global";

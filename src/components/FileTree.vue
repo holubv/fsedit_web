@@ -73,9 +73,15 @@
             addFile() {
                 this.$emit('add-file');
             },
-            onTreeChange(node, targetTree) {
-                console.log(node);
-                console.log(node.parent);
+            onTreeChange(node) {
+                let parent = null;
+                if (node.parent.id && node.parent.name) {
+                    parent = node.parent;
+                }
+                this.$emit('move-item', {
+                    item: node,
+                    parent
+                });
             },
         },
         components: {
