@@ -10,6 +10,9 @@
     import '@/theme/editor/darkula.js';
     import '@/theme/editor/idea.js';
 
+    import '../theme/editor/darkula.css'
+    import '../theme/editor/idea.css'
+
     export default {
         name: 'Ace',
         props: {
@@ -114,6 +117,14 @@
             this.editor.focus();
 
             this.modes = ace.acequire('ace/ext/modelist');
+
+            let textInput = window.document.querySelector('.ace_text-input');
+            if (textInput) {
+                textInput.removeAttribute('autocorrect');
+                textInput.removeAttribute('wrap');
+                textInput.setAttribute('autocomplete', 'off');
+                textInput.setAttribute('autocapitalize', 'none');
+            }
         }
     }
 </script>
