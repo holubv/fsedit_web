@@ -1,27 +1,56 @@
 <template>
     <div class="home editor-wrapper">
+        <!--<button v-for="type in ['none', 'min', 'small', 'normal', 'max', 'full']" @click="forceSideView = type">{{ type }}</button>-->
         <editor-drop-zone @file-upload-done="onFileUploadDone"
                           @undefined-workspace-hash="onUndefinedWorkspace"
                           :workspaceHash="wsHash">
 
-            <file-tree v-show="showFileTree"
-                       class="file-tree"
-                       :files="treeItems"
-                       :editable="editable"
-                       @open-file="onFileOpen"
-                       @add-folder="onAddItem(true)"
-                       @add-file="onAddItem(false)"
-                       @move-item="onItemMove"
-                       :active-file-id="activeFile ? activeFile.id : 0"
-            ></file-tree>
+            <split-panel :side="sideView" @switch="onSidePanelSwitch">
 
-            <editor v-bind:class="{'file-tree-visible': showFileTree}"
-                    :content="editorContent"
-                    :file="activeFile"
-                    :auto-save="autoSave"
-                    :editable="editable"
-                    @inactive="onEditorInactive"
-            ></editor>
+                <template slot="side-head">
+                    <div v-if="editable" :class="['side-panel', 'size-' + sideView]">
+                        <button class="btn primary"
+                                @click.prevent="onAddItem(false)"
+                                title="Add file">
+                            <i class="fas fa-plus"></i>
+                            <span v-if="sideView !== 'small'">Add file</span>
+                        </button>
+                        <button class="btn"
+                                @click.prevent="onAddItem(true)"
+                                title="Add folder">
+                            <i class="fas fa-folder-plus"></i>
+                            <span v-if="sideView !== 'small'">Add folder</span>
+                        </button>
+                    </div>
+                </template>
+
+                <template slot="side">
+                    <file-tree class="file-tree"
+                               :files="treeItems"
+                               :editable="editable"
+                               @open-file="onFileOpen"
+                               @move-item="onItemMove"
+                               :active-file-id="activeFile ? activeFile.id : 0"
+                    ></file-tree>
+                </template>
+
+                <template slot="side-foot">
+                    <div :class="['side-panel', 'size-' + sideView]">
+                        <!--<button class="btn">
+                            <i class="fas fa-print"></i>
+                            <span v-if="sideView !== 'min'">Print</span>
+                        </button>-->
+                    </div>
+                </template>
+
+                <editor :content="editorContent"
+                        :file="activeFile"
+                        :auto-save="autoSave"
+                        :editable="editable"
+                        @inactive="onEditorInactive"
+                ></editor>
+
+            </split-panel>
 
         </editor-drop-zone>
     </div>
@@ -30,6 +59,7 @@
 <script>
 
     import Editor from '../components/Editor';
+    import SplitPanel from '../components/SplitPanel';
     import FileTree from '../components/FileTree';
     import EditorDropZone from '../components/EditorDropZone';
     import Workspace from '../workspace';
@@ -46,10 +76,17 @@
                 activeFile: null,
                 /** @var {boolean} autoSave */
                 autoSave: true,
+                /** @var {?string} forceSideView */
+                forceSideView: null,
+                /** @var {?boolean} sideViewToggle */
+                sideViewToggle: null
             }
         },
         computed: {
-            showFileTree() {
+            mobile() {
+                return window.innerWidth < 720;
+            },
+            hasFileTree() {
                 //show file tree only if there are more files
                 //in workspace or the only item is a folder
                 if (!this.workspace || !this.workspace.hasItems()) {
@@ -57,6 +94,20 @@
                 }
                 let items = this.workspace.items;
                 return !(items.length === 1 && items[0].file);
+            },
+            sideView() {
+                if (this.forceSideView) {
+                    return this.forceSideView;
+                }
+                if (!this.hasFileTree && !this.editable) {
+                    return 'none';
+                }
+                let min = this.mobile ? 'min' : 'small';
+                let max = this.mobile ? 'max' : 'normal';
+                if (this.sideViewToggle !== null) {
+                    return this.sideViewToggle ? max : min;
+                }
+                return this.hasFileTree ? max : min;
             },
             wsHash() {
                 if (!this.workspace) {
@@ -128,17 +179,18 @@
              * @returns {Promise}
              */
             openFile(file) {
+                if (!file.file) {
+                    return Promise.resolve(false);
+                }
                 //todo loading icon / spinner
                 this.autoSave = false;
                 return this.workspace.loadFileContent(file).then(content => {
                     this.editorContent = content;
                     this.activeFile = file;
-
-                    let path = '';
-                    if (this.showFileTree) {
-                        path = `/${file.path.join('/')}`;
+                    this.updateRoute();
+                    if (this.mobile) {
+                        this.sideViewToggle = false;
                     }
-                    this.$router.push({path: `/${this.workspace.hash}${path}`});
                     this.$nextTick(() => {
                         this.autoSave = true;
                     });
@@ -166,7 +218,7 @@
                 let promise = this.workspace.addItem(name, !!folder, this.activeFile);
                 if (!noRefresh) {
                     return promise.then(file => {
-                        return this.refreshWorkspace().then(() => file);
+                        return this.refreshWorkspace().then(() => this.workspace.getItemById(file.id));
                     });
                 }
                 return promise;
@@ -181,7 +233,13 @@
                 }
                 return this.createWorkspace();
             },
-
+            updateRoute() {
+                let path = '';
+                if (this.hasFileTree && this.activeFile.path) {
+                    path = `/${this.activeFile.path.join('/')}`;
+                }
+                this.$router.push({path: `/${this.workspace.hash}${path}`});
+            },
             processRoute() {
                 if (this.$route.params.workspace) {
                     this.loadWorkspace(this.$route.params.workspace).then(() => {
@@ -203,6 +261,12 @@
             onItemMove({item, parent}) {
                 this.workspace.moveItem(item, parent)
                     .then(() => this.refreshWorkspace())
+                    .then(() => {
+                        if (this.activeFile && this.activeFile.id === item.id) {
+                            this.activeFile = this.workspace.getItemById(item.id);
+                            this.updateRoute();
+                        }
+                    })
                     .catch(err => {
                         console.error(err);
                         //todo show error dialog
@@ -215,14 +279,17 @@
                 });
             },
             onAddItem(folder) {
-                let name = window.prompt('Enter folder/file name:');
+                let name = window.prompt('Enter folder/file name with extension:');
                 if (!name) {
                     return;
                 }
-                this.addItem(name, folder).catch(err => {
-                    console.error(err);
-                    //todo show error dialog
-                });
+                this.getWorkspace()
+                    .then(() => this.addItem(name, folder))
+                    .then(f => this.openFile(f))
+                    .catch(err => {
+                        console.error(err);
+                        //todo show error dialog
+                    });
             },
             onUndefinedWorkspace() {
                 this.createWorkspace().catch(err => {
@@ -257,6 +324,19 @@
                         //todo show error dialog
                     });
             },
+            onSidePanelSwitch() {
+                if (this.sideViewToggle !== null) {
+                    this.sideViewToggle = !this.sideViewToggle;
+                    return;
+                }
+                let map = {
+                    min: true,
+                    small: true,
+                    normal: false,
+                    max: false
+                };
+                this.sideViewToggle = map[this.sideView];
+            }
         },
         watch: {
             '$route': function (route) {
@@ -269,6 +349,7 @@
             EditorDropZone,
             Editor,
             FileTree,
+            SplitPanel
         }
     }
 </script>
@@ -276,25 +357,26 @@
 <style scoped lang="less">
     @import "../theme/global";
 
-    .file-tree {
-        width: calc(20% - 1px);
-        display: inline-block;
-        height: calc(100vh - @nav-height - 1px);
-        vertical-align: top;
-        overflow: auto;
-        border-right: 1px solid;
-        .theme({ background-color: @content-background-color; border-color: darken(@background-color, 20%); });
-    }
-
-    .file-tree-visible {
-        width: 80%;
+    .far, .fas {
+        width: 16px;
+        margin-right: 6px;
     }
 
     .editor-wrapper {
         position: relative;
     }
 
-    .tree-item {
-        cursor: pointer;
+    .side-panel {
+        & button {
+            margin-right: 5px;
+            margin-left: 5px;
+            display: block;
+            width: calc(100% - 10px);
+        }
+        &.size-small button {
+            & .far, & .fas {
+                margin: 0;
+            }
+        }
     }
 </style>

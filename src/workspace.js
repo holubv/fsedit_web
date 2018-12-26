@@ -150,6 +150,30 @@ export default class Workspace {
 
     /**
      *
+     * @param {number} id
+     * @param {Object} [__items]
+     * @returns {Object|null}
+     */
+    getItemById(id, __items) {
+        if (__items === undefined) {
+            __items = this.items;
+        }
+        for (let item of __items) {
+            if (item.id === id) {
+                return item;
+            }
+            if (item.children) {
+                let childFound = this.getItemById(id, item.children);
+                if (childFound) {
+                    return childFound;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
      * @param {Object} file
      * @param {string} content
      * @returns {Promise}

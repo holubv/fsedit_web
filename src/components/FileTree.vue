@@ -1,15 +1,6 @@
 <template>
     <div>
 
-        <div v-if="editable" class="add-panel">
-            <button class="btn btn-add-folder" @click.prevent="addFolder">
-                <i class="fas fa-folder-plus"></i>Add folder
-            </button>
-            <button class="btn btn-add-file" @click.prevent="addFile">
-                <i class="fas fa-file-medical"></i>Add file
-            </button>
-        </div>
-
         <draggable-tree :data="data"
                         draggable="true"
                         droppable="true"
@@ -21,9 +12,10 @@
                     <div class="tree-entry"
                          v-bind:class="{active: activeFileId === data.id}"
                          tabindex="-1"
+                         @click="requestFileOpen(data)"
                          @keyup.delete.prevent="requestDelete(data)">
 
-                        <div v-if="data.file" @click="requestFileOpen(data)">
+                        <div v-if="data.file">
                             <!-- File -->
                             <i class="far fa-file"></i>
                             <span class="tree-item file-name">{{ data.name }}</span>
@@ -72,20 +64,10 @@
                 }
             },
             requestFileOpen(data) {
-                if (data.id === this.activeFileId) {
+                if (!data.file || data.id === this.activeFileId) {
                     return;
                 }
                 this.$emit('open-file', data);
-            },
-            addFolder() {
-                if (this.editable) {
-                    this.$emit('add-folder');
-                }
-            },
-            addFile() {
-                if (this.editable) {
-                    this.$emit('add-file');
-                }
             },
             onTreeChange(node) {
                 let parent = null;
@@ -161,15 +143,8 @@
     }
 
     .active {
-        //background-color: red;
         .theme({ background-color: @primary-color; color: @color-invert; });
         font-weight: bold;
-    }
-
-    .add-panel button {
-        margin-right: 5px;
-        margin-left: 5px;
-        display: inline-block;
     }
 
     .tree-entry {
