@@ -1,5 +1,9 @@
 <template>
-    <div style="width: 100%; height: 100%;" class="ace_editor" id="ace-div"></div>
+    <div style="width: 100%; height: 100%;"
+         :class="{'ace-darkula': this.darkTheme, 'ace_dark': this.darkTheme, 'ace-idea': !this.darkTheme}">
+
+        <div style="width: 100%; height: 100%;" class="ace_editor" ref="aceDiv"></div>
+    </div>
 </template>
 
 <script>
@@ -93,7 +97,7 @@
         mounted: function () {
             let _this = this;
 
-            this.editor = ace.edit(this.$el);
+            this.editor = ace.edit(this.$refs.aceDiv);
             //this.$emit('init', this.editor);
 
             this.editor.$blockScrolling = Infinity;
@@ -125,15 +129,6 @@
                 textInput.setAttribute('autocomplete', 'off');
                 textInput.setAttribute('autocapitalize', 'none');
             }
-
-            this.$nextTick(() => {
-                let ele = window.document.getElementById('ace-div');
-                if (this.darkTheme) {
-                    ele.className += ' ace-darkula ace_dark ';
-                } else {
-                    ele.className += ' ace-idea ';
-                }
-            });
         }
     }
 </script>
