@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%; height: 100%;" class="ace_editor ace-darkula ace_dark"></div>
+    <div style="width: 100%; height: 100%;" class="ace_editor" id="ace-div"></div>
 </template>
 
 <script>
@@ -125,6 +125,15 @@
                 textInput.setAttribute('autocomplete', 'off');
                 textInput.setAttribute('autocapitalize', 'none');
             }
+
+            this.$nextTick(() => {
+                let ele = window.document.getElementById('ace-div');
+                if (this.darkTheme) {
+                    ele.className += ' ace-darkula ace_dark ';
+                } else {
+                    ele.className += ' ace-idea ';
+                }
+            });
         }
     }
 </script>
