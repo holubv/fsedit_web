@@ -233,12 +233,21 @@
                 }
                 return this.createWorkspace();
             },
-            updateRoute() {
+            /**
+             *
+             * @param {boolean} [replace]
+             */
+            updateRoute(replace) {
                 let path = '';
                 if (this.hasFileTree && this.activeFile.path) {
                     path = `/${this.activeFile.path.join('/')}`;
                 }
-                this.$router.push({path: `/${this.workspace.hash}${path}`});
+                let route = {path: `/${this.workspace.hash}${path}`};
+                if (replace) {
+                    this.$router.replace(route);
+                } else {
+                    this.$router.push(route);
+                }
             },
             processRoute() {
                 if (this.$route.params.workspace) {
@@ -264,7 +273,7 @@
                     .then(() => {
                         if (this.activeFile && this.activeFile.id === item.id) {
                             this.activeFile = this.workspace.getItemById(item.id);
-                            this.updateRoute();
+                            this.updateRoute(true);
                         }
                     })
                     .catch(err => {
