@@ -277,7 +277,9 @@
                         }
                     })
                     .catch(err => {
-                        console.error(err);
+                        if (err.response && err.response.status === 409) {
+                            this.refreshWorkspace(); //todo better revert solution?
+                        }
                         //todo show error dialog
                     });
             },

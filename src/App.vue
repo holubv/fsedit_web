@@ -26,7 +26,13 @@
                 el.setAttribute('content', color);
             },
             '$fsedit.token': function(token) {
-                window.localStorage.setItem('token', token);
+                if (token) {
+                    window.localStorage.setItem('token', token);
+                    this.$api.defaults.headers['X-Api-Token'] = token;
+                } else {
+                    window.localStorage.removeItem('token');
+                    delete this.$api.defaults.headers['X-Api-Token'];
+                }
             },
             '$fsedit.user': function(user) {
                 window.localStorage.setItem('user', JSON.stringify(user));
