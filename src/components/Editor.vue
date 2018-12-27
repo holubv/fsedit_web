@@ -51,6 +51,7 @@
                 }
             },
             file(f) {
+                this.showWelcomeScreen = false;
                 this.filename = f ? f.name : '';
             },
             content(c) {

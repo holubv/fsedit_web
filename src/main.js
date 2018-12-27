@@ -14,6 +14,7 @@ Vue.prototype.$fsedit = new Vue({
         theme: null,
         apiUrl: apiUrl,
         token: null,
+        user: {}
     },
     computed: {
         logged() {

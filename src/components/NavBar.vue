@@ -6,8 +6,13 @@
                 <theme-selector></theme-selector>
             </li>
             <!--<li><a href="#">{{ $t('settings') }}</a></li>-->
-            <li>
+            <li v-if="!$fsedit.logged">
                 <router-link :to="{ name: 'login'}">{{ $t('login') }}</router-link>
+            </li>
+            <li v-else>
+                <router-link :to="{ name: 'profile'}">
+                    <i class="fas fa-user"></i> {{ username }}
+                </router-link>
             </li>
         </ul>
         <!--<locale-selector></locale-selector>-->
@@ -23,6 +28,15 @@
         components: {
             LocaleSelector,
             ThemeSelector
+        },
+        computed: {
+            username() {
+                let email = this.$fsedit.user.email;
+                if (!email) {
+                    return '';
+                }
+                return email.substring(0, email.indexOf('@'));
+            }
         }
     }
 </script>

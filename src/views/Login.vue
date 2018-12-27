@@ -1,17 +1,18 @@
 <template>
     <div class="wrapper">
-        <form>
+        <form @submit.prevent="onSubmit" :class="{processing}">
 
             <div>
                 <label for="email">{{ $t('auth.email') }}</label>
-                <div :class="['input-state', {success: email && email.includes('@')}]">
-                    <input v-model="email" type="email" name="email" id="email" required>
+                <div :class="['input-state', {success: register && emailValid, error: email && !emailValid}]">
+                    <input v-model="email" type="email" name="email" id="email"
+                           maxlength="64" autofocus pattern="[!-?A-~]+@[!-?A-~]+" required>
                 </div>
             </div>
 
             <div>
                 <label for="password">{{ $t('auth.password') }}</label>
-                <div :class="['input-state', {success: !!password}]">
+                <div :class="['input-state', {success: register && !!password}]">
                     <input v-model="password" type="password" name="password" id="password" required>
                 </div>
             </div>
@@ -32,33 +33,29 @@
                         <vue-recaptcha class="recaptcha"
                                        sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                                        :theme="$fsedit.theme"
+                                       @verify="onCaptchaVerified"
                         ></vue-recaptcha>
                     </div>
                 </transition>
             </div>
 
-            <a href="#" @click.prevent="morph">{{$t(i18nSwitchKey)}}</a>
+            <a href="#" @click.prevent="morph">{{$t('auth.switch.' + formType)}}</a>
 
-            <button class="btn primary submit" type="submit">Login</button>
+            <button class="btn primary submit"
+                    type="submit"
+                    :disabled="processing || (register && (!emailValid || !passwordMatch || !captchaKey))">
+                <i v-if="processing" class="fas fa-spinner fa-spin"></i>
+                <span v-else>{{$t('auth.btn.' + formType)}}</span>
+            </button>
 
-            <!--
+            <span v-if="error" class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ $t(error) }}
+            </span>
 
-            <input v-model="email" type="email" :placeholder="$t('auth.form.email')">
-                    <input v-model="password" type="password" :placeholder="$t('auth.form.password')">
-
-                    <transition name="component-fade">
-                        <div v-if="register">
-                            <input v-model="passwordAgain" type="password"
-                                   :class="{['input-error']: password !== passwordAgain}"
-                                   :placeholder="$t('auth.form.password2')">
-                            <vue-recaptcha :class="$style.recaptcha" sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"/>
-                        </div>
-                    </transition>
-
-                    <button :class="['btn', $style.submitBtn]" v-on:click.prevent>{{ $t('global.btn.' + authType) }}</button>
-
-            -->
         </form>
+
+        <!--<div v-if="processing" class="overlay" ref="overlay"></div>-->
     </div>
 </template>
 
@@ -74,7 +71,10 @@
                 password: '',
                 passwordAgain: '',
                 register: false,
-                recaptchaLoaded: false
+                recaptchaLoaded: false,
+                captchaKey: null,
+                processing: false,
+                error: null
             }
         },
         methods: {
@@ -96,6 +96,51 @@
                     window.document.head.appendChild(script);
                     this.recaptchaLoaded = true;
                 }
+            },
+            onCaptchaVerified(key) {
+                this.captchaKey = key;
+            },
+            onSubmit() {
+                if (this.processing) {
+                    return;
+                }
+                this.processing = true;
+
+                let data = new FormData();
+                data.append('email', this.email);
+                data.append('password', this.password);
+                if (this.captchaKey) {
+                    data.append('captcha', this.captchaKey);
+                }
+
+                this.$api.post('/users/' + this.formType, data)
+                    .then(rs => {
+                        let token = rs.data.token;
+                        if (!token) {
+                            throw {};
+                        }
+                        this.$fsedit.token = token;
+                        this.$fsedit.user = {
+                            email: rs.data.email
+                        };
+
+                        this.$router.push({name: 'index'});
+                    })
+                    .catch(err => {
+                        if (err.response) {
+                            let map = {
+                                403: 'err.auth.wrongCredentials',
+                                409: 'err.auth.alreadyRegistered',
+                                500: 'err.server'
+                            };
+                            this.error = map[err.response.status] || 'err.unknown';
+                        } else {
+                            this.error = 'err.net';
+                        }
+                    })
+                    .then(() => {
+                        this.processing = false;
+                    })
             }
         },
         computed: {
@@ -105,8 +150,14 @@
                     error: this.password !== this.passwordAgain
                 }
             },
-            i18nSwitchKey() {
-                return 'auth.switch.' + (this.register ? 'login' : 'register');
+            formType() {
+                return this.register ? 'register' : 'login';
+            },
+            emailValid() {
+                return this.email && this.email.match(/^[!-?A-~]+@[!-?A-~]+$/);
+            },
+            passwordMatch() {
+                return this.password && this.password === this.passwordAgain;
             }
         },
         components: {
@@ -143,6 +194,7 @@
 
     .wrapper {
         margin-top: 18px;
+        position: relative;
     }
 
     form {
@@ -154,6 +206,13 @@
         padding: 16px 12px;
     }
 
+    .overlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+    }
+
     .input-state {
         display: block;
         width: 300px;
@@ -162,10 +221,18 @@
     button {
         display: block;
         width: 300px;
+
+        & .fas {
+            font-size: 15px;
+        }
     }
 
     label {
         display: block;
+    }
+
+    .error-message {
+        .theme({ color: @danger-color });
     }
 
     .component-fade-enter-active, .component-fade-leave-active {

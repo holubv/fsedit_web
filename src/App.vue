@@ -15,6 +15,32 @@
     export default {
         components: {
             NavBar
+        },
+        watch: {
+            '$fsedit.theme': function(theme) {
+                window.document.body.className = 'theme-' + theme;
+                window.localStorage.setItem('theme', theme);
+
+                let el = window.document.getElementById('meta-theme');
+                let color = el.getAttribute('data-theme-' + theme);
+                el.setAttribute('content', color);
+            },
+            '$fsedit.token': function(token) {
+                window.localStorage.setItem('token', token);
+            },
+            '$fsedit.user': function(user) {
+                window.localStorage.setItem('user', JSON.stringify(user));
+            }
+        },
+        created() {
+            let theme = window.localStorage.getItem('theme');
+            this.$fsedit.theme = theme ? theme : 'dark';
+
+            let token = window.localStorage.getItem('token');
+            if (token) {
+                this.$fsedit.token = token;
+                this.$fsedit.user = JSON.parse(window.localStorage.getItem('user'));
+            }
         }
     }
 </script>
@@ -157,6 +183,15 @@
         &:focus {
             .theme({
                 box-shadow: 0 0 0 3px lighten(@primary-color, 20%);
+            });
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+            .theme({
+                color: @color;
+                background-color: @background-color;
+                border-color: @background-color;
             });
         }
     }

@@ -5,8 +5,12 @@
     "password": "Password",
     "passwordAgain": "Password Again",
     "switch": {
-      "register": "Not a Member yet?",
-      "login": "Already a Member?"
+      "register": "Already a Member?",
+      "login": "Not a Member yet?"
+    },
+    "btn": {
+      "register": "Register",
+      "login": "Login"
     }
   },
   "settings": "Settings",
@@ -17,5 +21,15 @@
   "welcome": {
     "title": "Welcome to",
     "desc": "Start by typing, pasting or dropping files or folders"
+  },
+  "err": {
+    "server": "500 Server error",
+    "net": "Server request failed",
+    "unknown": "Unknown error",
+    "auth": {
+      "noCaptcha": "You have to complete captcha challenge",
+      "wrongCredentials": "Wrong credentials, check your email and password",
+      "alreadyRegistered": "Email is already registered"
+    }
   }
 }
