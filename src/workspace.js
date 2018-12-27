@@ -13,6 +13,8 @@ export default class Workspace {
         this.editToken = null;
         /** @var {Object[]} */
         this.items = [];
+        /** @var {boolean} */
+        this.isOwner = true;
         /** @var {LRUCache} */
         this.fileCache = new LRUCache({
             max: 20,
@@ -72,7 +74,8 @@ export default class Workspace {
     loadStructure() {
         return Vue.prototype.$api.get('/workspace/' + this.hash).then(rs => {
             //console.log(rs.data.children);
-            this.items = rs.data;
+            this.isOwner = !!rs.data.owner;
+            this.items = rs.data.structure;
             return this;
         });
     }
@@ -97,7 +100,7 @@ export default class Workspace {
         return Vue.prototype.$api({
             url: '/files/create',
             method: 'put',
-            params: {'folder': folder ? 'true' : 'false', name, parent, workspace: this.hash}
+            params: {'folder': folder ? 'true' : 'false', name, parent, workspace: this.hash, edit: this.editToken}
         }).then(rs => rs.data);
         //todo add item to this.items or refreshWorkspace?
     }
@@ -112,7 +115,7 @@ export default class Workspace {
         return Vue.prototype.$api({
             url: '/files/move',
             method: 'put',
-            params: {id: item.id, parent: parent ? parent.id : 0, workspace: this.hash}
+            params: {id: item.id, parent: parent ? parent.id : 0, workspace: this.hash, edit: this.editToken}
         });
     }
 
@@ -182,7 +185,7 @@ export default class Workspace {
         return Vue.prototype.$api({
             url: '/files/edit',
             method: 'put',
-            params: {workspace: this.hash, file: file.id},
+            params: {workspace: this.hash, file: file.id, edit: this.editToken},
             headers: {'Content-Type': 'text/plain'},
             data: content
         }).then(() => {
@@ -195,7 +198,7 @@ export default class Workspace {
      * @returns {boolean}
      */
     canEdit() {
-        //todo check edit token and timestamp
-        return !!this.editToken;
+        //todo check timestamp
+        return this.isOwner || !!this.editToken;
     }
 }

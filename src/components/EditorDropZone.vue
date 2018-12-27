@@ -27,7 +27,8 @@
     export default {
         name: 'EditorDropZone',
         props: {
-            workspaceHash: String
+            workspaceHash: String,
+            editToken: String
         },
         data() {
             return {
@@ -39,7 +40,8 @@
                     clickable: false,
                     previewTemplate: this.dropZoneTemplate(),
                     headers: {
-                        Accept: 'application/json'
+                        Accept: 'application/json',
+                        'X-Api-Token': this.$fsedit.token
                     },
                     autoProcessQueue: false,
                     //todo maxFiles: 200
@@ -88,6 +90,9 @@
                 }
                 form.append('name', name);
                 form.append('workspace', this.workspaceHash);
+                if (this.editToken) {
+                    form.append('edit', this.editToken);
+                }
             },
             onFileSendComplete() {
                 this.showDropInput = false;

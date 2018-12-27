@@ -3,7 +3,8 @@
         <!--<button v-for="type in ['none', 'min', 'small', 'normal', 'max', 'full']" @click="forceSideView = type">{{ type }}</button>-->
         <editor-drop-zone @file-upload-done="onFileUploadDone"
                           @undefined-workspace-hash="onUndefinedWorkspace"
-                          :workspaceHash="wsHash">
+                          :workspaceHash="wsHash"
+                          :editToken="editToken">
 
             <split-panel :side="sideView" @switch="onSidePanelSwitch">
 
@@ -114,6 +115,12 @@
                     return null;
                 }
                 return this.workspace.hash;
+            },
+            editToken() {
+                if (!this.workspace) {
+                    return null;
+                }
+                return this.workspace.editToken;
             },
             treeItems() {
                 if (!this.workspace) {

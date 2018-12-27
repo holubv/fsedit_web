@@ -7,6 +7,7 @@ import Axios from 'axios'
 Vue.config.productionTip = false;
 
 let apiUrl = 'https://api.fsedit.cf';
+let token = window.localStorage.getItem('token') || null;
 
 Vue.prototype.$fsedit = new Vue({
     //reactive container
@@ -25,10 +26,11 @@ Vue.prototype.$fsedit = new Vue({
 Vue.prototype.$api = Axios.create({
     baseURL: apiUrl,
     timeout: 6000,
-    // headers: {
-    //     'Content-Type': 'application/x-www-form-urlencoded'
-    // }
 });
+
+if (token) {
+    Vue.prototype.$api.defaults.headers['X-Api-Token'] = token
+}
 
 new Vue({
     router,
