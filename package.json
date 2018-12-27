@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "brace": "^0.11.1",
+    "brace": "dennisoelkers/brace#0d9af44",
     "es6-promise-debounce": "^1.0.1",
     "lru-cache": "^5.1.1",
     "vue": "^2.5.18",
