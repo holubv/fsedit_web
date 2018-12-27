@@ -2,23 +2,37 @@
     <div class="wrapper">
         <form>
 
-            <div class="form-example">
+            <div>
                 <label for="email">{{ $t('auth.email') }}</label>
-                <input v-model="email" type="email" name="email" id="email" required>
+                <div :class="['input-state', {success: email && email.includes('@')}]">
+                    <input v-model="email" type="email" name="email" id="email" required>
+                </div>
             </div>
 
-            <div class="form-example">
+            <div>
                 <label for="password">{{ $t('auth.password') }}</label>
-                <input v-model="password" type="password" name="password" id="password" required>
+                <div :class="['input-state', {success: !!password}]">
+                    <input v-model="password" type="password" name="password" id="password" required>
+                </div>
             </div>
 
-            <div class="form-example">
+            <div>
                 <transition name="component-fade">
                     <div v-if="register">
                         <label for="password-again">{{ $t('auth.passwordAgain') }}</label>
-                        <input v-model="passwordAgain" type="password" name="passwordAgain" id="password-again"
-                               :class="{['input-error']: password !== passwordAgain}">
-                        <vue-recaptcha class="recaptcha" sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"/>
+
+                        <div :class="['input-state', inputPassAgainClass]">
+                            <input v-model="passwordAgain"
+                                   type="password"
+                                   name="passwordAgain"
+                                   id="password-again"
+                                   required>
+                        </div>
+
+                        <vue-recaptcha class="recaptcha"
+                                       sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                                       :theme="$fsedit.theme"
+                        ></vue-recaptcha>
                     </div>
                 </transition>
             </div>
@@ -85,6 +99,12 @@
             }
         },
         computed: {
+            inputPassAgainClass() {
+                return {
+                    success: this.password && this.password === this.passwordAgain,
+                    error: this.password !== this.passwordAgain
+                }
+            },
             i18nSwitchKey() {
                 return 'auth.switch.' + (this.register ? 'login' : 'register');
             }
@@ -100,12 +120,12 @@
 
     .recaptcha {
         display: block;
-        margin: 10px auto 10px;
+        margin: 10px auto 10px 1px;
         width: 300px;
         height: (78/304) * 300px;
 
         & > div {
-            .transform(scale(302/304));
+            .transform(scale(300 / 304) translateZ(0));
             .transform-origin(0 0);
         }
 
@@ -134,6 +154,11 @@
         padding: 16px 12px;
     }
 
+    .input-state {
+        display: block;
+        width: 300px;
+    }
+
     button {
         display: block;
         width: 300px;
@@ -141,15 +166,6 @@
 
     label {
         display: block;
-    }
-
-    input {
-        display: block;
-        width: 100%;
-    }
-
-    .input-error {
-        background-color: red;
     }
 
     .component-fade-enter-active, .component-fade-leave-active {

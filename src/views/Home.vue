@@ -376,6 +376,8 @@
     }
 
     .side-panel {
+        margin-bottom: 16px;
+
         & button {
             margin-right: 5px;
             margin-left: 5px;

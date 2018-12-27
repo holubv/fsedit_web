@@ -5,7 +5,7 @@
             <li>
                 <theme-selector></theme-selector>
             </li>
-            <li><a href="#">{{ $t('settings') }}</a></li>
+            <!--<li><a href="#">{{ $t('settings') }}</a></li>-->
             <li>
                 <router-link :to="{ name: 'login'}">{{ $t('login') }}</router-link>
             </li>

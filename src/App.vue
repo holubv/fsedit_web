@@ -36,9 +36,78 @@
     }
 
     #app {
-        .theme({
-            color: @color;
-        });
+        .theme({ color: @color; });
+    }
+
+    .input, .input-state input {
+        .font();
+        text-decoration: none;
+        text-shadow: none;
+
+        padding: 4px 14px;
+        margin: 4px 0;
+
+        border: 1px solid;
+        border-radius: 4px;
+
+        color: #000;
+
+        .theme-dark({ border-color: darken(@background-color, 25%); });
+        .theme-light({ border-color: darken(white, 25%); });
+
+        box-shadow: none;
+
+        outline: none;
+        -webkit-appearance: none;
+
+        &:focus {
+            .theme({ box-shadow: 0 0 0 3px lighten(@primary-color, 20%); });
+        }
+    }
+
+    .input-state {
+        position: relative;
+
+        & input {
+            width: calc(100% - 44px);
+            padding-right: 28px;
+            display: block;
+        }
+
+        &::after {
+            .icon-font(18px);
+            position: absolute;
+            right: 8px;
+            top: 0;
+            line-height: 32px;
+        }
+
+        &.success {
+            @color: lighten(green, 20%);
+            & input {
+                //color: #018a00;
+                &:focus {
+                    box-shadow: 0 0 0 3px @color !important;
+                }
+            }
+            &::after {
+                color: @color;
+                content: '\f00c';
+            }
+        }
+
+        &.error {
+            & input {
+                //color: red;
+                &:focus {
+                    box-shadow: 0 0 0 3px lighten(red, 20%) !important;
+                }
+            }
+            &::after {
+                color: red;
+                content: '\f00d';
+            }
+        }
     }
 
     .btn {
