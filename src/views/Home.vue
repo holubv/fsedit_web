@@ -361,6 +361,11 @@
                 if (route.name === 'index') {
                     this.clearWorkspace();
                 }
+            },
+            '$fsedit.token': function (token) {
+                if (!token && this.workspace) {
+                    this.workspace.isOwner = false;
+                }
             }
         },
         components: {

@@ -7,12 +7,15 @@
             </li>
             <!--<li><a href="#">{{ $t('settings') }}</a></li>-->
             <li v-if="!$fsedit.logged">
-                <router-link :to="{ name: 'login'}">{{ $t('login') }}</router-link>
+                <router-link :to="{ name: 'login', query: {ws: $route.params.workspace}}">{{ $t('login') }}</router-link>
             </li>
             <li v-else>
                 <router-link :to="{ name: 'profile'}">
                     <i class="fas fa-user"></i> {{ username }}
                 </router-link>
+            </li>
+            <li v-if="$fsedit.logged">
+                <a href="#" @click.prevent="$fsedit.token = null; $fsedit.user = {}">Logout</a> <!-- todo way to logout -->
             </li>
         </ul>
         <!--<locale-selector></locale-selector>-->

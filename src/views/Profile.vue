@@ -2,6 +2,8 @@
     <div class="profile">
         <h1>Profile</h1>
         {{ $fsedit.user.email }}
+        <!-- todo list user workspaces -->
+        <span>todo list user workspaces</span>
     </div>
 </template>
 

@@ -124,7 +124,12 @@
                             email: rs.data.email
                         };
 
-                        this.$router.push({name: 'index'});
+                        let ws = this.$route.query.ws;
+                        if (ws) {
+                            this.$router.push({name: 'show', params: {workspace: ws}});
+                        } else {
+                            this.$router.push({name: 'index'});
+                        }
                     })
                     .catch(err => {
                         if (err.response) {
