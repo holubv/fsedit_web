@@ -48,6 +48,7 @@
                         :file="activeFile"
                         :auto-save="autoSave"
                         :editable="editable"
+                        :last-save="lastSave"
                         @inactive="onEditorInactive"
                 ></editor>
 
@@ -80,7 +81,9 @@
                 /** @var {?string} forceSideView */
                 forceSideView: null,
                 /** @var {?boolean} sideViewToggle */
-                sideViewToggle: null
+                sideViewToggle: null,
+                /** @var {number} lastSave */
+                lastSave: 0
             }
         },
         computed: {
@@ -335,7 +338,9 @@
                         if (!file) {
                             return this.refreshWorkspace();
                         }
-                        //todo change file saved indicator
+                        if (this.activeFile && file.id === this.activeFile.id) {
+                            this.lastSave = Date.now();
+                        }
                     })
                     .catch(err => {
                         console.error(err);

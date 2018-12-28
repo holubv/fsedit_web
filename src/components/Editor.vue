@@ -12,9 +12,21 @@
 
         <welcome-screen ref="welcomeScreen" v-if="showWelcomeScreen"></welcome-screen>
 
-        <footer>
-            <span style="float: left;">{{ filename }}</span> <!-- todo add proper css class -->
-            <span>{{ $route.params.workspace }}</span>
+        <footer :class="{highlight: editable}">
+            <div>
+                <span v-if="file" style="float: left;">
+                    <span v-if="editable">
+                        <i v-if="lastEdit > lastSave" class="fas fa-pen" title="Unsaved"></i>
+                        <i v-else class="fas fa-save" title="Saved"></i>
+                    </span>
+                    {{ filename }}
+                </span>
+                <span>
+                    <i v-if="editable" class="fas fa-lock-open" title="Editable"></i>
+                    <i v-else class="fas fa-lock" title="Read-only"></i>
+                    {{ $route.params.workspace }}
+                </span>
+            </div>
         </footer>
     </div>
 </template>
@@ -31,13 +43,15 @@
             content: String,
             autoSave: Boolean,
             editable: Boolean,
+            lastSave: Number
         },
         data() {
             return {
                 editorContent: '',
                 filename: '',
                 showWelcomeScreen: true,
-                windowWidth: 0
+                windowWidth: 0,
+                lastEdit: 0
             }
         },
         components: {
@@ -53,6 +67,7 @@
             file(f) {
                 this.showWelcomeScreen = false;
                 this.filename = f ? f.name : '';
+                this.lastEdit = 0;
             },
             content(c) {
                 this.editorContent = c || '';
@@ -69,6 +84,7 @@
             onEditorInput() {
                 this.showWelcomeScreen = false;
                 if (this.autoSave) {
+                    this.lastEdit = Date.now();
                     let file = this.file;
                     let content = this.editorContent;
 
@@ -88,8 +104,8 @@
 </script>
 
 <style>
-    .ace_editor.read-only .ace_cursor {
-        visibility: hidden!important;
+    .read-only .ace_editor .ace_cursor {
+        visibility: hidden !important;
     }
 </style>
 
@@ -124,6 +140,15 @@
         line-height: @foot-height;
         text-align: right;
         font-size: 14px;
-        .theme({ color: darken(@color, 10%); background-color: @background-color; })
+        .theme({ color: darken(@color, 10%); background-color: @background-color; });
+
+        & > div {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+        &.highlight {
+            .theme({ color: @color-invert; background-color: @primary-color; });
+        }
     }
 </style>
