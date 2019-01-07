@@ -112,6 +112,8 @@
             right: 8px;
             top: 0;
             line-height: 32px;
+            width: 18px;
+            text-align: center;
         }
 
         &.success {
@@ -138,6 +140,18 @@
             &::after {
                 color: red;
                 content: '\f00d';
+            }
+        }
+
+        &.warn {
+            & input {
+                &:focus {
+                    box-shadow: 0 0 0 3px lighten(orange, 20%) !important;
+                }
+            }
+            &::after {
+                color: orange;
+                content: '\f12a';
             }
         }
     }

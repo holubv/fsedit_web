@@ -128,6 +128,28 @@
                 textInput.removeAttribute('wrap');
                 textInput.setAttribute('autocomplete', 'off');
                 textInput.setAttribute('autocapitalize', 'none');
+
+                /*
+                On android devices keyboard events have always keyCode 229
+                this is a simple fix for pressing backspace on line start
+                which should normally remove line
+
+                todo does not work as expected, need changes
+                 */
+                let startPos = {};
+                textInput.addEventListener('keydown', (e) => {
+                    startPos = Object.assign({}, this.editor.getCursorPosition());
+                    //console.log('start: ' + startPos.column);
+                });
+                textInput.addEventListener('keyup', (e) => {
+                    let pos = this.editor.getCursorPosition();
+                    //console.log('end: ' + pos.column);
+                    if (e.which === 229) {
+                        if (pos.column === 0 && startPos.column === pos.column && startPos.row === pos.row) {
+                            this.editor.execCommand('backspace', {source: 'ace'});
+                        }
+                    }
+                });
             }
         }
     }
