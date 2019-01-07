@@ -4,9 +4,10 @@
 
             <div>
                 <label for="email">{{ $t('auth.email') }}</label>
-                <div :class="['input-state', {success: register && emailValid, error: email && !emailValid}]">
+                <div :class="['input-state', emailState]">
                     <input v-model="email" type="email" name="email" id="email"
-                           maxlength="64" autofocus pattern="[!-?A-~]+@[!-?A-~]+" required>
+                           maxlength="64" autofocus pattern="[!-?A-~]+@[!-?A-~]+" required
+                           @input="onEmailChange">
                 </div>
             </div>
 
@@ -62,6 +63,7 @@
 <script>
 
     import VueRecaptcha from 'vue-recaptcha'
+    import debounce from 'es6-promise-debounce'
 
     export default {
         name: 'Login',
@@ -74,7 +76,8 @@
                 recaptchaLoaded: false,
                 captchaKey: null,
                 processing: false,
-                error: null
+                error: null,
+                emailState: '' //{success: register && emailValid, error: email && !emailValid, warn: true}
             }
         },
         methods: {
@@ -96,6 +99,48 @@
                     window.document.head.appendChild(script);
                     this.recaptchaLoaded = true;
                 }
+            },
+            userExists(email) {
+                if (email === undefined) {
+                    email = this.email;
+                }
+
+                return this.$api({
+                    url: '/users/exists',
+                    method: 'post',
+                    params: {
+                        email: email
+                    },
+                    validateStatus(status) {
+                        return (status >= 200 && status < 300) || status === 409;
+                    },
+                }).then(rs => {
+                    return rs.status === 409;
+                });
+            },
+            debounced: debounce(() => Promise.resolve(null), 1000),
+            onEmailChange() {
+                if (!this.email) {
+                    this.emailState = '';
+                    return;
+                }
+                if (!this.emailValid) {
+                    this.emailState = 'error';
+                    return;
+                }
+                if (!this.register) {
+                    return;
+                }
+                this.emailState = '';
+                this.debounced()
+                    .then(() => this.userExists())
+                    .then(exists => {
+                        if (exists) {
+                            this.emailState = 'warn';
+                        } else {
+                            this.emailState = 'success';
+                        }
+                    });
             },
             onCaptchaVerified(key) {
                 this.captchaKey = key;
