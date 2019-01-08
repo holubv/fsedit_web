@@ -212,6 +212,7 @@
                 return this.workspace.loadFileContent(file).then(content => {
                     this.editorContent = content;
                     this.activeFile = file;
+                    this.focusedItem = file;
                     this.updateRoute();
                     if (this.mobile) {
                         this.sideViewToggle = false;
@@ -352,6 +353,13 @@
                     return;
                 }
 
+                this.workspace.renameItem(file, name)
+                    .then(() => this.refreshWorkspace())
+                    .then(() => this.workspace.getItemById(file.id))
+                    .then(f => this.openFile(f))
+                    .catch(err => {
+                        //todo show error dialog
+                    });
             },
             onItemDelete(file) {
                 if (!file) {

@@ -144,6 +144,20 @@ export default class Workspace {
 
     /**
      *
+     * @param {Object} item
+     * @param {string} name
+     * @returns {Promise}
+     */
+    renameItem(item, name) {
+        return Vue.prototype.$api({
+            url: '/files/rename',
+            method: 'put',
+            params: {id: item.id, name, workspace: this.hash, edit: this.editToken}
+        });
+    }
+
+    /**
+     *
      * @param {string} path
      * @returns {Object|null}
      */

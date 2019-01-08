@@ -155,7 +155,8 @@
             background-color: darken(@color, 50%);
         });
         .theme-light({
-            background-color: white;
+            color: @color-invert;
+            background-color: lighten(@color, 50%);
         });
         font-weight: bold;
 
