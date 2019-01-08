@@ -41,16 +41,29 @@
                     <div v-if="editable" :class="['side-panel', 'size-' + sideView]">
                         <button class="btn"
                                 :disabled="!focusedItem"
-                                @click.prevent="onItemRename(null)">
+                                @click.prevent="onItemRename(null)"
+                                title="Rename">
                             <i class="fas fa-i-cursor"></i>
                             <span v-if="sideView !== 'small'">Rename</span>
                         </button>
                         <button class="btn"
                                 :disabled="!focusedItem"
-                                @click.prevent="onItemDelete(null)">
+                                @click.prevent="onItemDelete(null)"
+                                title="Delete">
                             <i class="fas fa-trash-alt"></i>
                             <span v-if="sideView !== 'small'">Delete</span>
                         </button>
+
+                        <file-raw-link class="btn" title="Download" :item="focusedItem" :download="true">
+                            <i class="fas fa-download"></i>
+                            <span v-if="sideView !== 'small'">Download</span>
+                        </file-raw-link>
+
+                        <file-raw-link class="btn" title="Raw" :item="focusedItem">
+                            <i class="far fa-file-code"></i>
+                            <span v-if="sideView !== 'small'">Raw</span>
+                        </file-raw-link>
+
                     </div>
                 </template>
 
@@ -74,6 +87,7 @@
     import SplitPanel from '../components/SplitPanel';
     import FileTree from '../components/FileTree';
     import EditorDropZone from '../components/EditorDropZone';
+    import FileRawLink from '../components/FileRawLink';
     import Workspace from '../workspace';
 
     export default {
@@ -158,6 +172,7 @@
         methods: {
             clearWorkspace() {
                 this.closeFile();
+                this.focusedItem = null;
                 this.workspace = null;
             },
             closeFile() {
@@ -292,6 +307,9 @@
                         //todo show error dialog
                     });
                 }
+            },
+            openFileRaw(file, download) {
+                window.open('https://api.fsedit.cf/file/' + file.file, '_blank');
             },
             onItemMove({item, parent}) {
                 this.workspace.moveItem(item, parent)
@@ -433,7 +451,8 @@
             EditorDropZone,
             Editor,
             FileTree,
-            SplitPanel
+            SplitPanel,
+            FileRawLink
         }
     }
 </script>
@@ -452,15 +471,19 @@
 
     .side-panel {
 
-        & button {
+        & .btn {
             margin-right: 5px;
             margin-left: 5px;
         }
 
-        &.size-small button {
+        &.size-small .btn {
             & .far, & .fas {
                 margin: 0;
             }
         }
+    }
+
+    a.btn {
+        display: inline-block;
     }
 </style>

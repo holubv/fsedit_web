@@ -55,14 +55,14 @@
                 });
             }
         },
-        // mounted() {
-        //     this.computeSideBodyHeight();
-        //     window.addEventListener('resize', this.computeSideBodyHeight);
-        // },
-        // beforeDestroy() {
-        //     console.log('before destroy SplitPanel');
-        //     window.removeEventListener('resize', this.computeSideBodyHeight);
-        // }
+        mounted() {
+            this.computeSideBodyHeight();
+            window.addEventListener('resize', this.computeSideBodyHeight);
+        },
+        beforeDestroy() {
+            console.log('before destroy SplitPanel');
+            window.removeEventListener('resize', this.computeSideBodyHeight);
+        }
     }
 </script>
 

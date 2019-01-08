@@ -3,7 +3,7 @@
     <transition name="fade">
         <div class="welcome-wrapper">
             <div class="welcome-box">
-                <h1>{{ $t('welcome.title') }} <span class="logo">fsEdit|</span></h1>
+                <h1>{{ $t('welcome.title') }} <span class="logo no-after">fsEdit|</span></h1>
                 <span>{{ $t('welcome.desc') }}</span>
             </div>
         </div>

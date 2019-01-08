@@ -191,6 +191,7 @@
         white-space: nowrap;
 
         .user-select(none);
+        -webkit-user-drag: none;
 
         &.primary {
             .theme({
@@ -213,6 +214,10 @@
                 background-color: @background-color;
                 border-color: @background-color;
             });
+
+            &:focus {
+                box-shadow: none!important;
+            }
         }
     }
 
@@ -223,6 +228,29 @@
         & * {
             .theme-color();
             text-decoration: none;
+        }
+
+        &::after {
+            content: "BETA";
+
+            font-size: 12px;
+            font-family: monospace;
+
+            margin-left: 2px;
+            padding-left: 4px;
+            padding-right: 4px;
+
+            border-radius: 4px;
+            vertical-align: top;
+
+            .theme({
+                color: @color-invert;
+                background-color: @primary-color;
+            });
+        }
+
+        &.no-after::after {
+            content: none;
         }
     }
 

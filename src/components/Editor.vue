@@ -30,7 +30,18 @@
                     This file type is not supported by <span class="logo">fsEdit|</span>
                     but you can download it
                 </div>
-                <a :href="fileUrl" target="_blank"><i class="fas fa-download"></i> Download</a>
+                <!--<a :href="fileUrl" target="_blank"><i class="fas fa-download"></i> Download</a>-->
+
+                <file-raw-link title="Download" :item="file" :download="true">
+                    <i class="fas fa-download"></i>
+                    <span>Download</span>
+                </file-raw-link>
+
+                <file-raw-link title="Raw" :item="file">
+                    <i class="far fa-file-code"></i>
+                    <span>Raw</span>
+                </file-raw-link>
+
             </div>
 
         </div>
@@ -61,6 +72,7 @@
 <script>
     import Ace from './Ace'
     import WelcomeScreen from './WelcomeScreen'
+    import FileRawLink from './FileRawLink';
     import debounce from 'es6-promise-debounce'
 
     export default {
@@ -84,7 +96,8 @@
         },
         components: {
             Ace,
-            WelcomeScreen
+            WelcomeScreen,
+            FileRawLink
         },
         watch: {
             windowWidth(width) {
@@ -238,6 +251,12 @@
             display: inline-block;
             font-size: 42px;
             padding-top: 32px;
+            margin-left: 16px;
+            margin-right: 16px;
+
+            & .far, & .fas {
+                margin-right: 6px;
+            }
         }
     }
 
@@ -290,5 +309,9 @@
             right: 0;
             z-index: 10;
         }
+    }
+
+    .logo::after {
+        line-height: 18px;
     }
 </style>
