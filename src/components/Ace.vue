@@ -135,7 +135,7 @@
                 which should normally remove line
 
                 todo does not work as expected, need changes
-                 */
+                */
                 let startPos = {};
                 textInput.addEventListener('keydown', (e) => {
                     startPos = Object.assign({}, this.editor.getCursorPosition());

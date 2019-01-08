@@ -58,16 +58,8 @@
             display: inline-block;
             line-height: @nav-height;
         }
-    }
 
-    .logo {
-        display: inline-block;
-        .logo-font();
-
-        & * {
-            .theme-color();
-            text-decoration: none;
-        }
+        overflow-y: hidden; /* todo fix nav on mobile devices */
     }
 
     .menu {

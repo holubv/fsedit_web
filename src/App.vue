@@ -216,7 +216,18 @@
         }
     }
 
+    .logo {
+        display: inline-block;
+        .logo-font();
+
+        & * {
+            .theme-color();
+            text-decoration: none;
+        }
+    }
+
     a {
+        text-decoration: none;
         .theme({
             color: @primary-color;
         })

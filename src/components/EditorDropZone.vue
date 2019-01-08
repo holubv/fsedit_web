@@ -14,6 +14,8 @@
                         @vdropzone-file-added="onFileAdded"
                         @vdropzone-sending="onFileSending"
                         @vdropzone-queue-complete="onFileSendComplete"
+                        @vdropzone-drag-end="onDragEnd"
+                        @vdropzone-drag-leave="onDragEnd"
         ></vue2-drop-zone>
 
     </div>
@@ -97,6 +99,11 @@
             onFileSendComplete() {
                 this.showDropInput = false;
                 this.$emit('file-upload-done');
+            },
+            onDragEnd() {
+                if (!this.$refs.dropZone.getQueuedFiles().length) {
+                    this.showDropInput = false;
+                }
             },
             dropZoneTemplate: function () {
                 return `<div class="dz-preview dz-file-preview">

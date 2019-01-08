@@ -51,11 +51,17 @@ export default class Workspace {
             url: '/file/' + item.file,
             transformResponse: [data => data],
             headers: {
-                'Cache-Control': 'no-cache'
-            }
+                'Cache-Control': 'no-cache',
+                'Accept': 'text/plain'
+            },
+            validateStatus: function (status) {
+                return status === 200 || status === 406;
+            },
         }).then(rs => {
-            this.fileCache.set(item.file, rs.data);
-            return rs.data;
+            item.mime = rs.headers['content-type'];
+            let content = rs.data;
+            this.fileCache.set(item.file, content);
+            return content;
         });
     }
 
