@@ -75,7 +75,7 @@
         data() {
             return {
                 editorContent: '',
-                editorType: null,
+                editorType: 'text',
                 filename: '',
                 showWelcomeScreen: true,
                 windowWidth: 0,
