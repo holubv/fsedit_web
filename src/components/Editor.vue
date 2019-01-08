@@ -96,10 +96,14 @@
                 this.showWelcomeScreen = false;
                 this.filename = f ? f.name : '';
                 this.lastEdit = 0;
-                this.editorType = null;
+                this.editorType = 'text';
                 let ext = this.filename.toLowerCase().split('.').pop();
 
                 console.log(this.file);
+
+                if (!this.file || !this.file.mime) {
+                    return;
+                }
 
                 if (this.file.mime.startsWith('image/')) {
                     this.editorType = 'image';
