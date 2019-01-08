@@ -13,7 +13,7 @@
             <div v-if="editorType === 'image'" class="image-preview">
                 <div class="img-background-pattern">
                     <img :src="fileUrl" :alt="file.name" draggable="false"
-                         @dragstart="() => false">
+                         @dragstart="e => {e.preventDefault()}">
                 </div>
             </div>
 
@@ -115,7 +115,7 @@
                     return;
                 }
 
-                if (['mp3', 'ogg'].indexOf(ext) > -1) {
+                if (['mp3', 'ogg', 'wav'].indexOf(ext) > -1) {
                     this.editorType = 'audio';
                     return;
                 }
@@ -209,15 +209,29 @@
         }
     }
 
+    .audio-bgn-color() {
+        .theme-dark({ background-color: @primary-color; });
+        .theme-light({ background-color: white; });
+    }
+
     audio {
-        padding-top: 32px;
-        margin: auto;
+        margin: 32px auto 0;
         display: block;
+        width: 50%;
+        border-radius: 4px;
+
+        .audio-bgn-color();
+
+        //noinspection CssInvalidPseudoSelector
+        &::-webkit-media-controls-panel {
+            .audio-bgn-color();
+        }
     }
 
     .unknown-preview {
         padding-top: 32px;
         text-align: center;
+
         & a {
             .user-select(none);
             -webkit-user-drag: none;
