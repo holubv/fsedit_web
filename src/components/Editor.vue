@@ -203,7 +203,8 @@
 
     .img-background-pattern {
         display: inline-block;
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQYV2NsaGj4z8DAwFBfXw+iGBgxBP7//w9W0djYCFGBLgAAlZkS+9GbY7EAAAAASUVORK5CYII=) repeat;
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQYV2NsaGj4z8DAwFBfXw+iGBgxBP7//w9W0djYCFGBLgAAlZkS+9GbY7EAAAAASUVORK5CYII=) repeat fixed;
+        image-rendering: pixelated;
     }
 
     audio {
