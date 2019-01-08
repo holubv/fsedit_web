@@ -30,11 +30,11 @@
                                    required>
                         </div>
 
-                        <vue-recaptcha class="recaptcha"
+                        <!--<vue-recaptcha class="recaptcha"
                                        sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                                        :theme="$fsedit.theme"
                                        @verify="onCaptchaVerified"
-                        ></vue-recaptcha>
+                        ></vue-recaptcha>-->
                     </div>
                 </transition>
             </div>
@@ -72,7 +72,7 @@
                 passwordAgain: '',
                 register: false,
                 recaptchaLoaded: false,
-                captchaKey: null,
+                captchaKey: 'not-implemented-yet', //todo implement captcha on server side
                 processing: false,
                 error: null
             }
