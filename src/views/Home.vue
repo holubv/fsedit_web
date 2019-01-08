@@ -32,16 +32,25 @@
                                @open-file="onFileOpen"
                                @move-item="onItemMove"
                                @delete-file="onItemDelete"
+                               @click-file="item => {this.focusedItem = item}"
                                :active-file-id="activeFile ? activeFile.id : 0"
                     ></file-tree>
                 </template>
 
                 <template slot="side-foot">
-                    <div :class="['side-panel', 'size-' + sideView]">
-                        <!--<button class="btn">
-                            <i class="fas fa-print"></i>
-                            <span v-if="sideView !== 'min'">Print</span>
-                        </button>-->
+                    <div v-if="editable" :class="['side-panel', 'size-' + sideView]">
+                        <button class="btn"
+                                :disabled="!focusedItem"
+                                @click.prevent="onItemRename(null)">
+                            <i class="fas fa-i-cursor"></i>
+                            <span v-if="sideView !== 'small'">Rename</span>
+                        </button>
+                        <button class="btn"
+                                :disabled="!focusedItem"
+                                @click.prevent="onItemDelete(null)">
+                            <i class="fas fa-trash-alt"></i>
+                            <span v-if="sideView !== 'small'">Delete</span>
+                        </button>
                     </div>
                 </template>
 
@@ -84,7 +93,9 @@
                 /** @var {?boolean} sideViewToggle */
                 sideViewToggle: null,
                 /** @var {number} lastSave */
-                lastSave: 0
+                lastSave: 0,
+                /** @var {?Object} focusedItem */
+                focusedItem: null,
             }
         },
         computed: {
@@ -328,8 +339,29 @@
                     //todo show error dialog
                 });
             },
+            onItemRename(file) {
+                if (!file) {
+                    file = this.focusedItem;
+                }
+                if (!file) {
+                    console.warn('no item selected');
+                    return;
+                }
+                let name = window.prompt(file.file ? 'Enter file name with extension:' : 'Enter folder name:', file.name);
+                if (!name || file.name === name) {
+                    return;
+                }
+
+            },
             onItemDelete(file) {
-                if (!window.confirm('Do you really want to delete this item?')) {
+                if (!file) {
+                    file = this.focusedItem;
+                }
+                if (!file) {
+                    console.warn('no item selected');
+                    return;
+                }
+                if (!window.confirm('Do you really want to delete this item "' + file.name + '"?')) {
                     return;
                 }
 
@@ -411,13 +443,10 @@
     }
 
     .side-panel {
-        margin-bottom: 16px;
 
         & button {
             margin-right: 5px;
             margin-left: 5px;
-            display: block;
-            width: calc(100% - 10px);
         }
 
         &.size-small button {

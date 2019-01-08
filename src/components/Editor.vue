@@ -193,18 +193,20 @@
         height: 100%;
         width: 100%;
 
+        & .img-background-pattern {
+            display: inline-block;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQYV2NsaGj4z8DAwFBfXw+iGBgxBP7//w9W0djYCFGBLgAAlZkS+9GbY7EAAAAASUVORK5CYII=) repeat fixed;
+            image-rendering: pixelated;
+        }
+
         & img {
             .user-select(none);
             -webkit-user-drag: none;
             max-width: 100%;
             display: block;
-        }
-    }
 
-    .img-background-pattern {
-        display: inline-block;
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQYV2NsaGj4z8DAwFBfXw+iGBgxBP7//w9W0djYCFGBLgAAlZkS+9GbY7EAAAAASUVORK5CYII=) repeat fixed;
-        image-rendering: pixelated;
+            image-rendering: auto;
+        }
     }
 
     audio {

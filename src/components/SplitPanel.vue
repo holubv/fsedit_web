@@ -1,14 +1,16 @@
 <template>
     <div :class="['split-panel', 'display-' + side]">
         <div class="side">
-            <div class="side-head">
+            <div class="side-head" ref="sideHead">
                 <slot name="side-head"></slot>
             </div>
-            <div class="side-body">
+            <div class="side-body" :style="sideBodyStyle">
                 <slot name="side"></slot>
             </div>
-            <div class="side-foot">
+            <div class="side-foot" ref="sideFoot">
                 <slot name="side-foot"></slot>
+
+                <div class="footer-placeholder"></div>
             </div>
             <div class="control">
                 <div class="control-switch" @click.prevent="$emit('switch')">
@@ -31,7 +33,36 @@
                 type: String,
                 default: 'normal'
             }
-        }
+        },
+        data() {
+            return {
+                sideBodyStyle: {
+                    height: '100%'
+                }
+            }
+        },
+        methods: {
+            computeSideBodyHeight() {
+                let head = this.$refs.sideHead.clientHeight;
+                let foot = this.$refs.sideFoot.clientHeight;
+                this.sideBodyStyle.height = 'calc(100% - ' + head + 'px - ' + foot + 'px)';
+            }
+        },
+        watch: {
+            side() {
+                this.$nextTick(() => {
+                    this.computeSideBodyHeight();
+                });
+            }
+        },
+        // mounted() {
+        //     this.computeSideBodyHeight();
+        //     window.addEventListener('resize', this.computeSideBodyHeight);
+        // },
+        // beforeDestroy() {
+        //     console.log('before destroy SplitPanel');
+        //     window.removeEventListener('resize', this.computeSideBodyHeight);
+        // }
     }
 </script>
 
@@ -60,6 +91,18 @@
 
     .side-body {
         overflow: auto;
+        position: relative;
+    }
+
+    .side-foot {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+
+        & .footer-placeholder {
+            width: 100%;
+            height: @foot-height;
+        }
     }
 
     .content {
@@ -73,11 +116,9 @@
         height: 100%;
         width: 0;
 
-        @media (max-width: 720px) {
-            width: 60px;
-        }
-
-        .theme({ background-color: fade(@color, 1%); });
+        /*@media (max-width: 720px) {*/
+            /*width: 60px;*/
+        /*}*/
 
         & .control-switch {
             position: absolute;

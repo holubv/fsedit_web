@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="file-tree">
 
         <draggable-tree :data="data"
                         draggable="true"
@@ -33,6 +33,10 @@
             </div>
         </draggable-tree>
 
+        <div class="touch-scroll-ribbon">
+            <!-- this overlay solves dragging / scrolling problems on touch devices -->
+        </div>
+
     </div>
 </template>
 
@@ -64,6 +68,7 @@
                 }
             },
             requestFileOpen(data) {
+                this.$emit('click-file', data);
                 if (!data.file || data.id === this.activeFileId) {
                     return;
                 }
@@ -120,6 +125,10 @@
 <style scoped lang="less">
     @import "../theme/global";
 
+    .file-tree {
+        position: relative;
+    }
+
     ul {
         list-style-type: none;
         padding-left: 0;
@@ -159,6 +168,21 @@
         padding: 4px 0 4px 4px;
         cursor: pointer;
         white-space: nowrap;
+    }
+
+    .touch-scroll-ribbon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 85px;
+        height: 100%;
+        display: none;
+
+        .theme({ background-color: fade(@color, 1%); });
+
+        @media (max-width: 720px) {
+            display: block;
+        }
     }
 
 </style>
