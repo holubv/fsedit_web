@@ -93,16 +93,9 @@
     .he-tree {
         padding-bottom: 120px;
         display: inline-block;
-        width: 100%;
     }
 
     .tree-node {
-    }
-
-    @media (max-width: 720px) {
-        .tree_12_node_root {
-            width: 80%;
-        }
     }
 
     .tree-node-inner-back {

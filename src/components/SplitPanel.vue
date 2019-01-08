@@ -10,9 +10,11 @@
             <div class="side-foot">
                 <slot name="side-foot"></slot>
             </div>
-            <div class="control" @click.prevent="$emit('switch')">
-                <i v-if="side === 'min' || side === 'small'" class="fas fa-chevron-right"></i>
-                <i v-else class="fas fa-chevron-left"></i>
+            <div class="control">
+                <div class="control-switch" @click.prevent="$emit('switch')">
+                    <i v-if="side === 'min' || side === 'small'" class="fas fa-chevron-right"></i>
+                    <i v-else class="fas fa-chevron-left"></i>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -51,9 +53,13 @@
         position: relative;
         height: calc(100vh - @nav-height - 1px);
         vertical-align: top;
-        overflow: auto;
+        overflow: hidden;
         border-right: 1px solid;
         .theme({ background-color: @content-background-color; border-color: darken(@background-color, 20%); });
+    }
+
+    .side-body {
+        overflow: auto;
     }
 
     .content {
@@ -62,18 +68,35 @@
 
     .control {
         position: absolute;
-        height: @control-height;
-        width: @control-width;
-        .theme({ background-color: fade(@color, 10%); color: @color-invert; });
-        top: 50%;
-        margin-top: -(@control-height / 2);
+        top: 0;
         right: 0;
-        cursor: pointer;
+        height: 100%;
+        width: 0;
 
-        & i {
-            line-height: @control-height;
-            width: 100%;
-            text-align: center;
+        @media (max-width: 720px) {
+            width: 60px;
+        }
+
+        .theme({ background-color: fade(@color, 1%); });
+
+        & .control-switch {
+            position: absolute;
+            top: 50%;
+            margin-top: -(@control-height / 2);
+            right: 0;
+
+            height: @control-height;
+            width: @control-width;
+
+            .theme({ background-color: fade(@color, 10%); color: @color-invert; });
+
+            cursor: pointer;
+
+            & i {
+                line-height: @control-height;
+                width: 100%;
+                text-align: center;
+            }
         }
     }
 
