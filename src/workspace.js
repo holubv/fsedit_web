@@ -127,6 +127,23 @@ export default class Workspace {
 
     /**
      *
+     * @param {Object} item
+     * @returns {Promise}
+     */
+    removeItem(item) {
+        return Vue.prototype.$api({
+            url: '/files/delete',
+            method: 'post',
+            params: {id: item.id, workspace: this.hash, edit: this.editToken}
+        }).then(() => {
+            if (item.file) {
+                this.fileCache.del(item.file);
+            }
+        });
+    }
+
+    /**
+     *
      * @param {string} path
      * @returns {Object|null}
      */

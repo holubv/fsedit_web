@@ -31,6 +31,7 @@
                                :editable="editable"
                                @open-file="onFileOpen"
                                @move-item="onItemMove"
+                               @delete-file="onItemDelete"
                                :active-file-id="activeFile ? activeFile.id : 0"
                     ></file-tree>
                 </template>
@@ -145,13 +146,16 @@
         },
         methods: {
             clearWorkspace() {
+                this.closeFile();
+                this.workspace = null;
+            },
+            closeFile() {
                 this.autoSave = false;
                 this.editorContent = '';
-                this.workspace = null;
                 this.activeFile = null;
                 this.$nextTick(() => {
                     this.autoSave = true;
-                })
+                });
             },
             /**
              *
@@ -300,7 +304,7 @@
                 });
             },
             onAddItem(folder) {
-                let name = window.prompt('Enter folder/file name with extension:');
+                let name = window.prompt(folder ? 'Enter folder name:' : 'Enter file name with extension:');
                 if (!name) {
                     return;
                 }
@@ -323,6 +327,18 @@
                     console.error(err);
                     //todo show error dialog
                 });
+            },
+            onItemDelete(file) {
+                if (!window.confirm('Do you really want to delete this item?')) {
+                    return;
+                }
+
+                this.workspace.removeItem(file)
+                    .then(() => this.closeFile())
+                    .then(() => this.refreshWorkspace())
+                    .catch(err => {
+                        //todo show error dialog
+                    });
             },
             onEditorInactive({file, content}) {
                 this.getWorkspace()
@@ -403,6 +419,7 @@
             display: block;
             width: calc(100% - 10px);
         }
+
         &.size-small button {
             & .far, & .fas {
                 margin: 0;

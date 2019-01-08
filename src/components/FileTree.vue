@@ -142,8 +142,17 @@
     }
 
     .active {
-        .theme({ background-color: @primary-color; color: @color-invert; });
+        .theme-dark({
+            background-color: darken(@color, 50%);
+        });
+        .theme-light({
+            background-color: white;
+        });
         font-weight: bold;
+
+        &:focus {
+            .theme({ background-color: @primary-color; color: @color-invert; });
+        }
     }
 
     .tree-entry {
