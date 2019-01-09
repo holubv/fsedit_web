@@ -2,7 +2,7 @@
 
     <a :href="url"
        target="_blank"
-       :disabled="!item || !item.file"
+       :class="{disabled: !item || !item.file}"
        draggable="false"
        @dragstart="e => {e.preventDefault()}"
        @click="e => {if (!item || !item.file) e.preventDefault()}">

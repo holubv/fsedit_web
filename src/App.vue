@@ -207,7 +207,7 @@
             });
         }
 
-        &[disabled] {
+        &[disabled], &.disabled {
             cursor: not-allowed;
             .theme({
                 color: @color;
