@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "predeploy": "npm run build && vue-cli-service zip:build",
+    "deploy": "node deploy.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "brace": "dennisoelkers/brace#0d9af44",
+    "brace": "holubv/brace#fsedit",
     "es6-promise-debounce": "^1.0.1",
     "lru-cache": "^5.1.1",
     "vue": "^2.5.18",
@@ -21,8 +23,10 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",
     "@vue/cli-service": "^3.2.0",
+    "archiver": "^3.0.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "vue-cli-plugin-build-zip": "0.0.3",
     "vue-template-compiler": "^2.5.18"
   },
   "postcss": {

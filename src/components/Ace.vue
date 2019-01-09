@@ -7,6 +7,12 @@
 </template>
 
 <script>
+    import '../theme/editor/style/ace-snippet-marker.css';
+    import '../theme/editor/style/ace-tm.css';
+    import '../theme/editor/style/ace_editor.css';
+    import '../theme/editor/style/autocompletion.css';
+    import '../theme/editor/style/error-widget.css';
+
     import * as ace from 'brace';
     import 'brace/ext/modelist';
     //import 'brace/ext/searchbox';
