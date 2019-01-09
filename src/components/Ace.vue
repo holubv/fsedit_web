@@ -157,6 +157,18 @@
                     }
                 });
             }
+
+            this.$nextTick(() => {
+                let gutterLayer = window.document.querySelector('.ace_layer.ace_gutter-layer');
+                if (gutterLayer) {
+                    gutterLayer.style.height = '100000px';
+                }
+
+                let textLayer = window.document.querySelector('.ace_layer.ace_text-layer');
+                if (textLayer) {
+                    textLayer.style.height = '100000px';
+                }
+            });
         }
     }
 </script>

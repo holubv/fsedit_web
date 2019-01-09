@@ -228,7 +228,7 @@ export default class Workspace {
             headers: {'Content-Type': 'text/plain'},
             data: content
         }).then(() => {
-            this.fileCache.set(file.file, content);
+            this.fileCache.set(file.file, {content, mime: 'text/plain'});
         });
     }
 
