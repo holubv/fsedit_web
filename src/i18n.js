@@ -11,6 +11,8 @@ if (!lang) {
     lang = 'en';
 }
 
+lang = 'en'; //force english todo language selector
+
 export default new VueI18n({
     locale: lang,
     fallbackLocale: 'en',
