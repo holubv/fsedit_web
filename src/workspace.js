@@ -45,7 +45,9 @@ export default class Workspace {
      */
     loadFileContent(item, ignoreCache) {
         if (!ignoreCache && this.fileCache.has(item.file)) {
-            return Promise.resolve(this.fileCache.get(item.file));
+            let cached = this.fileCache.get(item.file);
+            item.mime = cached.mime;
+            return Promise.resolve(cached.content);
         }
         return Vue.prototype.$api({
             url: '/file/' + item.file,
@@ -60,7 +62,7 @@ export default class Workspace {
         }).then(rs => {
             item.mime = rs.headers['content-type'];
             let content = rs.data;
-            this.fileCache.set(item.file, content);
+            this.fileCache.set(item.file, {content, mime: item.mime});
             return content;
         });
     }

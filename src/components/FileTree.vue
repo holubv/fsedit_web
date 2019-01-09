@@ -98,6 +98,7 @@
     .he-tree {
         padding-bottom: 120px;
         display: inline-block;
+        width: 100%;
     }
 
     .tree-node {
