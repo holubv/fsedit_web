@@ -311,15 +311,31 @@
                     });
                 }
             },
-            openFileRaw(file, download) {
-                window.open('https://api.fsedit.cf/file/' + file.file, '_blank');
+            guessFileExtension(content) {
+                //todo better extension recognition
+                content = content.trim();
+                if (content.startsWith('<?php')) {
+                    return 'php';
+                }
+                if (content.indexOf('class') !== -1 && content.indexOf('$this->') !== -1) {
+                    return 'php';
+                }
+                if (content.indexOf('<?') !== -1 && content.indexOf('?>') !== -1 && content.indexOf('$') !== -1) {
+                    return 'php';
+                }
+                if (content.startsWith('<!DOCTYPE html>')) {
+                    return 'html';
+                }
+                return 'txt';
             },
             onItemMove({item, parent}) {
                 this.workspace.moveItem(item, parent)
                     .then(() => this.refreshWorkspace())
                     .then(() => {
                         if (this.activeFile && this.activeFile.id === item.id) {
-                            this.activeFile = this.workspace.getItemById(item.id);
+                            let moved = this.workspace.getItemById(item.id);
+                            moved.mime = item.mime;
+                            this.activeFile = moved;
                             this.updateRoute(true);
                         }
                     })
@@ -407,7 +423,7 @@
                         if (file) {
                             return Promise.resolve({workspace, f: file});
                         } else {
-                            return this.addItem('unnamed.txt', false, true).then(f => ({workspace, f}));
+                            return this.addItem('unnamed.' + this.guessFileExtension(content), false, true).then(f => ({workspace, f}));
                         }
                     })
                     .then(({workspace, f}) => workspace.saveFileContent(f, content))

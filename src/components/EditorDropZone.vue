@@ -46,9 +46,9 @@
                         'X-Api-Token': this.$fsedit.token
                     },
                     autoProcessQueue: false,
-                    //todo maxFiles: 200
+                    maxFiles: 50,
                     //thumbnailWidth: 150,
-                    //maxFilesize: 0.5,
+                    maxFilesize: 1, //todo higher size limit
                     //headers: { "My-Awesome-Header": "header value" }
                 },
                 wsRequested: false
