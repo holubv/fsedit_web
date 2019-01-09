@@ -38,21 +38,24 @@
                 </template>
 
                 <template slot="side-foot">
-                    <div v-if="editable" :class="['side-panel', 'size-' + sideView]">
-                        <button class="btn"
-                                :disabled="!focusedItem"
-                                @click.prevent="onItemRename(null)"
-                                title="Rename">
-                            <i class="fas fa-i-cursor"></i>
-                            <span v-if="sideView !== 'small'">Rename</span>
-                        </button>
-                        <button class="btn"
-                                :disabled="!focusedItem"
-                                @click.prevent="onItemDelete(null)"
-                                title="Delete">
-                            <i class="fas fa-trash-alt"></i>
-                            <span v-if="sideView !== 'small'">Delete</span>
-                        </button>
+                    <div :class="['side-panel', 'size-' + sideView]">
+
+                        <div v-if="editable">
+                            <button class="btn"
+                                    :disabled="!focusedItem"
+                                    @click.prevent="onItemRename(null)"
+                                    title="Rename">
+                                <i class="fas fa-i-cursor"></i>
+                                <span v-if="sideView !== 'small'">Rename</span>
+                            </button>
+                            <button class="btn"
+                                    :disabled="!focusedItem"
+                                    @click.prevent="onItemDelete(null)"
+                                    title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                                <span v-if="sideView !== 'small'">Delete</span>
+                            </button>
+                        </div>
 
                         <file-raw-link class="btn" title="Download" :item="focusedItem" :download="true">
                             <i class="fas fa-download"></i>
