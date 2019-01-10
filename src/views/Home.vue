@@ -93,6 +93,8 @@
     import FileRawLink from '../components/FileRawLink';
     import Workspace from '../workspace';
 
+    import detectSrcLang from '../src-lang-detector';
+
     export default {
         name: 'home',
         data() {
@@ -312,21 +314,8 @@
                 }
             },
             guessFileExtension(content) {
-                //todo better extension recognition
-                content = content.trim();
-                if (content.startsWith('<?php')) {
-                    return 'php';
-                }
-                if (content.indexOf('class') !== -1 && content.indexOf('$this->') !== -1) {
-                    return 'php';
-                }
-                if (content.indexOf('<?') !== -1 && content.indexOf('?>') !== -1 && content.indexOf('$') !== -1) {
-                    return 'php';
-                }
-                if (content.startsWith('<!DOCTYPE html>')) {
-                    return 'html';
-                }
-                return 'txt';
+                //todo better extension recognition - NLP?
+                return detectSrcLang(content);
             },
             onItemMove({item, parent}) {
                 this.workspace.moveItem(item, parent)

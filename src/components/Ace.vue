@@ -9,7 +9,7 @@
 <script>
     import '../theme/editor/style/ace-snippet-marker.css';
     import '../theme/editor/style/ace-tm.css';
-    import '../theme/editor/style/ace_editor.css';
+    import '../theme/editor/style/ace-editor.css';
     import '../theme/editor/style/autocompletion.css';
     import '../theme/editor/style/error-widget.css';
 
