@@ -156,6 +156,25 @@
         }
     }
 
+    .box {
+        margin: 0 16px;
+        padding: 16px;
+
+        border: 1px solid;
+        border-radius: 4px;
+        font-weight: bold;
+
+        .theme({
+            border-color: @color;
+            background-color: @background-color;
+        });
+
+        &.error {
+            border-color: lighten(red, 20%)!important;
+            box-shadow: 0 0 0 3px lighten(red, 20%);
+        }
+    }
+
     .btn {
         .font();
         text-decoration: none;

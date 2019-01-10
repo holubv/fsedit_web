@@ -123,7 +123,7 @@
                     return;
                 }
 
-                if (this.file.mime.startsWith('text/')) {
+                if (this.file.mime.startsWith('text/') || this.file.mime === 'application/xml') {
                     this.editorType = 'text';
                     return;
                 }
