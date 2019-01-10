@@ -17,7 +17,7 @@
             NavBar
         },
         watch: {
-            '$fsedit.theme': function(theme) {
+            '$fsedit.theme': function (theme) {
                 window.document.body.className = 'theme-' + theme;
                 window.localStorage.setItem('theme', theme);
 
@@ -25,22 +25,37 @@
                 let color = el.getAttribute('data-theme-' + theme);
                 el.setAttribute('content', color);
             },
-            '$fsedit.token': function(token) {
+            '$fsedit.token': function (token) {
                 if (token) {
                     window.localStorage.setItem('token', token);
+                    window.localStorage.setItem('token-created', Date.now().toString());
                     this.$api.defaults.headers['X-Api-Token'] = token;
                 } else {
                     window.localStorage.removeItem('token');
-                    delete this.$api.defaults.headers['X-Api-Token'];
+                    window.localStorage.removeItem('token-created');
+
+                    console.log('logout request...');
+                    this.$api.post('/users/logout')
+                        .catch(() => {
+                        })
+                        .then(() => {
+                            delete this.$api.defaults.headers['X-Api-Token'];
+                        });
                 }
             },
-            '$fsedit.user': function(user) {
+            '$fsedit.user': function (user) {
                 window.localStorage.setItem('user', JSON.stringify(user));
             }
         },
         created() {
             let theme = window.localStorage.getItem('theme');
             this.$fsedit.theme = theme ? theme : 'dark';
+
+            let created = parseInt(window.localStorage.getItem('token-created') || '0');
+            if (created + 2592000000 < Date.now()) {
+                console.warn('expired token detected, please log in');
+                return;
+            }
 
             let token = window.localStorage.getItem('token');
             if (token) {
