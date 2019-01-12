@@ -1,6 +1,6 @@
 <template>
     <div class="home editor-wrapper">
-        <!--<button v-for="type in ['none', 'min', 'small', 'normal', 'max', 'full']" @click="forceSideView = type">{{ type }}</button>-->
+
         <editor-drop-zone @file-upload-done="onFileUploadDone"
                           @undefined-workspace-hash="onUndefinedWorkspace"
                           :workspaceHash="wsHash"

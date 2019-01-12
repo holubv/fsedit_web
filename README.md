@@ -1,6 +1,3 @@
-# fsedit_web
+# fsEdit
 
-## todo
-
-- disable auto workspace creation - use some button instead
-- user workspace list and edit
+[Backend](https://github.com/holubv/fsedit_backend)
