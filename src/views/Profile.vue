@@ -11,8 +11,7 @@
 
         <ul>
             <li v-for="ws in workspaces">
-                <div><router-link :to="{ name: 'show', params: {workspace: ws.hash}}">{{ ws.hash }}</router-link></div>
-                <div>{{ ws.files  }}</div>
+                <workspace-preview :ws-hash="ws.hash"></workspace-preview>
             </li>
         </ul>
 
@@ -22,6 +21,7 @@
 <script>
 
     import Vue from 'vue';
+    import WorkspacePreview from '../components/WorkspacePreview'
 
     export default {
         name: 'profile',
@@ -31,7 +31,9 @@
             }
         },
         methods: {},
-        components: {},
+        components: {
+            WorkspacePreview
+        },
         beforeRouteEnter (to, from, next) {
             if (!Vue.prototype.$fsedit.token) {
                 return next({ name: 'login' });
