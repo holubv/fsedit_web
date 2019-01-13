@@ -123,3 +123,13 @@ do okna editoru, kde můžeme workspace editovat (přidat soubory, upravovat sou
 ![](https://i.imgur.com/qWD7x5r.png)
 
 ![](https://i.imgur.com/Pj71R5Y.png)
+
+### Jiné typy souborů
+
+#### Audio
+
+![](https://i.imgur.com/5saZNKk.png)
+
+#### Nepodporovaný
+
+![](https://i.imgur.com/o8rDYhb.png)
