@@ -172,7 +172,12 @@
         beforeRouteEnter(to, from, next) {
             next(_this => {
                 _this.processRoute.apply(_this);
+                window.document.body.style.overflow = 'hidden';
             });
+        },
+        beforeRouteLeave(to, from, next) {
+            next();
+            window.document.body.style.overflow = null;
         },
         methods: {
             clearWorkspace() {
