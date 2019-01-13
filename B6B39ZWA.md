@@ -27,7 +27,7 @@ Platforma pro sdílení a úpravu textových (a jiných) souborů s jednoduchým
 - ECMAScript 6
 - SPA (MVVM) framework: [Vue.js](https://vuejs.org)
 - Webpack, babel, npm
-- Editor: lehce upravená knihovna [brace]([https://github.com/holubv/brace/tree/fsedit) (Ace.js)
+- Editor: lehce upravená knihovna [brace](https://github.com/holubv/brace/tree/fsedit) (Ace.js)
 - Drag and drop file upload: [vue-dropzone](https://github.com/rowanwins/vue-dropzone) (Dropzone.js)
 - Styly: Less
 - Komunikace se serverem pomocí ajax [axios](https://github.com/axios/axios)
@@ -59,6 +59,11 @@ Obsahuje tokeny přihlášených uživatelů, kterými se identifikují
 
 ##### file_tree
 
+- workspace_id: reference na workspace
+- lft, rgt, parent_id, level: [Nested set](https://en.wikipedia.org/wiki/Nested_set_model),
+uložení stromové struktury souborů a složek
+- name: název souboru
+- file: náhodný hash, určuje cestu k souboru na serveru ve složce uploads
 
 ## Ukázky
 
