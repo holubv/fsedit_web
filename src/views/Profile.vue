@@ -1,19 +1,19 @@
 <template>
     <div class="content">
-        <div class="box error">
-            This page is under development
-        </div>
 
-        <h1>Profile</h1>
-        {{ $fsedit.user.email }}
-        <!-- todo list user workspaces -->
         <h1>Workspaces</h1>
 
-        <ul>
-            <li v-for="ws in workspaces">
-                <workspace-preview :ws-hash="ws.hash"></workspace-preview>
-            </li>
-        </ul>
+        <div v-if="workspaces.length">
+            <ul>
+                <li v-for="ws in workspaces">
+                    <workspace-preview :ws="ws"></workspace-preview>
+                </li>
+            </ul>
+
+            <a v-if="page > 0" href="#" @click.prevent="page--">Previous page</a>
+            <a v-if="this.workspaces.length === 3" href="#" class="next-page" @click.prevent="page++">Next page</a>
+        </div>
+        <span v-else>No workspaces found</span>
 
     </div>
 </template>
@@ -27,30 +27,37 @@
         name: 'profile',
         data() {
             return {
-                workspaces: []
+                workspaces: [],
+                page: 0
             }
         },
-        methods: {},
+        methods: {
+            loadWorkspaces() {
+                this.$api.get('/workspaces/list', {
+                    params: {
+                        page: this.page
+                    }
+                }).then(rs => {
+                    this.workspaces = rs.data;
+                    window.scrollTo(0, 0);
+                });
+            }
+        },
         components: {
             WorkspacePreview
         },
-        beforeRouteEnter (to, from, next) {
+        beforeRouteEnter(to, from, next) {
             if (!Vue.prototype.$fsedit.token) {
-                return next({ name: 'login' });
+                return next({name: 'login'});
             }
             return next();
         },
         mounted() {
-            this.$api.get('/workspaces/list').then(rs => {
-                this.workspaces = rs.data;
-            });
+            this.loadWorkspaces();
         },
-        filters: {
-            substr(val, start, len) {
-                if (!val) {
-                    return '';
-                }
-                return val.substr(start, len);
+        watch: {
+            page() {
+                this.loadWorkspaces();
             }
         }
     }
@@ -67,13 +74,21 @@
     }
 
     .content {
-        padding: 32px 16px;
-        .theme({
-            background-color: @content-background-color;
-        });
+        padding: 0 16px 32px;
+        .theme({ background-color: @background-color; });
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
     }
 
     li {
         margin-bottom: 8px;
+
+    }
+
+    a.next-page {
+        float: right;
     }
 </style>

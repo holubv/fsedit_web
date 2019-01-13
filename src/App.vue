@@ -72,7 +72,7 @@
     body {
         .font();
         margin: 0;
-        overflow: hidden;
+        overflow-x: hidden;
 
         &.theme-dark {
             background-color: @dark-background-color;
