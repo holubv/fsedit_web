@@ -8,7 +8,10 @@ Vue.use(VueI18n);
 
 let lang = window.localStorage.getItem('lang');
 if (!lang) {
-    lang = 'en';
+    lang = navigator.language || navigator.userLanguage;
+    if (!lang) {
+        lang = 'en';
+    }
 }
 
 if (!['en', 'cs'].includes(lang)) {
