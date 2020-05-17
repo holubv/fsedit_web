@@ -52,6 +52,8 @@
 
     h1 {
         margin-top: 0;
+        margin-bottom: 21px;
+        font-size: 32px;
     }
 
     .logo {
