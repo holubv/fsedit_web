@@ -19,7 +19,7 @@
                     </router-link>
                 </li>
                 <li v-if="$fsedit.logged">
-                    <a href="#" @click.prevent="$fsedit.token = null; $fsedit.user = {}">Logout</a> <!-- todo way to logout -->
+                    <a href="#" @click.prevent="$fsedit.token = null; $fsedit.user = {}">{{ $t('logout') }}</a>
                 </li>
             </ul>
         </nav>

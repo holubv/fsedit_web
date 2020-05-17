@@ -14,13 +14,13 @@
                                 @click.prevent="onAddItem(false)"
                                 title="Add file">
                             <i class="fas fa-plus"></i>
-                            <span v-if="sideView !== 'small'">Add file</span>
+                            <span v-if="sideView !== 'small'">{{ $t('side.addFile') }}</span>
                         </button>
                         <button class="btn"
                                 @click.prevent="onAddItem(true)"
                                 title="Add folder">
                             <i class="fas fa-folder-plus"></i>
-                            <span v-if="sideView !== 'small'">Add folder</span>
+                            <span v-if="sideView !== 'small'">{{ $t('side.addFolder') }}</span>
                         </button>
                     </div>
                 </template>
@@ -46,25 +46,25 @@
                                     @click.prevent="onItemRename(null)"
                                     title="Rename">
                                 <i class="fas fa-i-cursor"></i>
-                                <span v-if="sideView !== 'small'">Rename</span>
+                                <span v-if="sideView !== 'small'">{{ $t('side.rename') }}</span>
                             </button>
                             <button class="btn"
                                     :disabled="!focusedItem"
                                     @click.prevent="onItemDelete(null)"
                                     title="Delete">
                                 <i class="fas fa-trash-alt"></i>
-                                <span v-if="sideView !== 'small'">Delete</span>
+                                <span v-if="sideView !== 'small'">{{ $t('side.delete') }}</span>
                             </button>
                         </div>
 
                         <file-raw-link class="btn" title="Download" :item="focusedItem" :download="true">
                             <i class="fas fa-download"></i>
-                            <span v-if="sideView !== 'small'">Download</span>
+                            <span v-if="sideView !== 'small'">{{ $t('side.download') }}</span>
                         </file-raw-link>
 
                         <file-raw-link class="btn" title="Raw" :item="focusedItem">
                             <i class="far fa-file-code"></i>
-                            <span v-if="sideView !== 'small'">Raw</span>
+                            <span v-if="sideView !== 'small'">{{ $t('side.raw') }}</span>
                         </file-raw-link>
 
                     </div>
@@ -347,7 +347,7 @@
                 });
             },
             onAddItem(folder) {
-                let name = window.prompt(folder ? 'Enter folder name:' : 'Enter file name with extension:');
+                let name = window.prompt(folder ? this.$t('side.alert.folderName') : this.$t('side.alert.fileName'));
                 if (!name) {
                     return;
                 }

@@ -9,7 +9,7 @@
             <li v-for="(file,i) in ws.files" v-if="i < 2">
                 <pre v-if="preview[file]">{{ preview[file] }}</pre>
                 <img v-else-if="preview[file] === false" :src="'https://api.fsedit.cf/file/' + file" :alt="file">
-                <div v-else class="info">Preview not available</div>
+                <div v-else class="info">{{ $t('workspaces.noPreview') }}</div>
             </li>
             <li v-if="ws.count > 2">
                 <div class="info">+{{ ws.count - 2 }} more file{{ ws.count - 2 > 1 ? 's' : '' }}</div>

@@ -1,6 +1,27 @@
 {
   "lang": "Čeština",
   "login": "Přihlásit se",
+  "logout": "Odhlásit se",
+  "theme": "Vzhled",
+  "side": {
+    "addFile": "Přidat soubor",
+    "addFolder": "Přidat složku",
+    "rename": "Přejmenovat",
+    "delete": "Smazat",
+    "download": "Stáhnout",
+    "raw": "Zobrazit zdroj",
+    "alert": {
+      "folderName": "Název složky",
+      "fileName": "Název souboru s připonou"
+    }
+  },
+  "workspaces": {
+    "title": "Vaše sdílení",
+    "notFound": "Nenalezeny žádné položky",
+    "nextPage": "Další strana",
+    "prevPage": "Předchozí strana",
+    "noPreview": "Náhled není k dispozici"
+  },
   "auth": {
     "email": "Email",
     "password": "Heslo",

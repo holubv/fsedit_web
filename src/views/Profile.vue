@@ -1,7 +1,7 @@
 <template>
     <div class="content">
 
-        <h1>Workspaces</h1>
+        <h1>{{ $t('workspaces.title') }}</h1>
 
         <div v-if="workspaces.length">
             <ul>
@@ -10,10 +10,10 @@
                 </li>
             </ul>
 
-            <a v-if="page > 0" href="#" @click.prevent="page--">Previous page</a>
-            <a v-if="this.workspaces.length === 3" href="#" class="next-page" @click.prevent="page++">Next page</a>
+            <a v-if="page > 0" href="#" @click.prevent="page--">{{ $t('workspaces.prevPage') }}</a>
+            <a v-if="this.workspaces.length === 3" href="#" class="next-page" @click.prevent="page++">{{ $t('workspaces.nextPage') }}</a>
         </div>
-        <span v-else>No workspaces found</span>
+        <span v-else>{{ $t('workspaces.notFound') }}</span>
 
     </div>
 </template>

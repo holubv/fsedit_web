@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--<button class="btn" v-for="theme in themes" v-on:click="changeTheme(theme)">{{ $t('themes.' + theme) }}</button>-->
-        <a href="#" v-on:click.prevent="toggleTheme"><i class="fas fa-palette"></i> Theme</a>
+        <a href="#" v-on:click.prevent="toggleTheme"><i class="fas fa-palette"></i> {{ $t('theme') }}</a>
     </div>
 </template>
 

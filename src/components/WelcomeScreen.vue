@@ -20,7 +20,7 @@
 <style scoped lang="less">
     @import "../theme/global";
 
-    @box-width: 400px;
+    @box-width: 480px;
     @box-height: 90px;
 
     .welcome-wrapper {

@@ -1,6 +1,27 @@
 {
   "lang": "English",
   "login": "Login",
+  "logout": "Logout",
+  "theme": "Theme",
+  "side": {
+    "addFile": "Add File",
+    "addFolder": "Add Folder",
+    "rename": "Rename",
+    "delete": "Delete",
+    "download": "Download",
+    "raw": "Raw",
+    "alert": {
+      "folderName": "Enter folder name:",
+      "fileName": "Enter file name with extension:"
+    }
+  },
+  "workspaces": {
+    "title": "Workspaces",
+    "notFound": "No workspaces found",
+    "nextPage": "Next Page",
+    "prevPage": "Previous Page",
+    "noPreview": "Preview not available"
+  },
   "auth": {
     "email": "Email",
     "password": "Password",
