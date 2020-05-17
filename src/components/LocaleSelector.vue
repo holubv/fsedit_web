@@ -23,6 +23,10 @@
 
     @import "../theme/global";
 
+    i.fas {
+        width: @nav-icon-width;
+    }
+
     div {
         .theme({ color: @primary-color; });
     }

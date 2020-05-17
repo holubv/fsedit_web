@@ -33,5 +33,9 @@
 </script>
 
 <style scoped lang="less">
+    @import "../theme/global";
 
+    i.fas {
+        width: @nav-icon-width;
+    }
 </style>
