@@ -14,7 +14,9 @@
                 </li>
                 <!--<li><a href="#">{{ $t('settings') }}</a></li>-->
                 <li v-if="!$fsedit.logged">
-                    <router-link :to="{ name: 'login', query: {ws: $route.params.workspace}}">{{ $t('login') }}</router-link>
+                    <router-link :to="{ name: 'login', query: {ws: $route.params.workspace}}">
+                        <i class="fas fa-sign-in-alt"></i> {{ $t('login') }}
+                    </router-link>
                 </li>
                 <li v-else>
                     <router-link :to="{ name: 'profile'}">
@@ -56,7 +58,12 @@
                 }
                 return email.substring(0, email.indexOf('@'));
             }
-        }
+        },
+        watch: {
+            '$route': function (route) {
+                this.expandMenu = false;
+            }
+        },
     }
 </script>
 
