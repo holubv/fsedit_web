@@ -3,11 +3,11 @@
         <header>
             <nav-bar></nav-bar>
         </header>
-        <div class="page-container">
+        <section class="page-container">
 
             <router-view></router-view>
 
-        </div>
+        </section>
     </div>
 </template>
 
