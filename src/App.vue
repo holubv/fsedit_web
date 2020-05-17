@@ -207,7 +207,7 @@
         .theme-dark({
             color: @color;
             background-color: darken(@color, 50%);
-            border-color: darken(@background-color, 25%);
+            border-color: darken(@color, 60%);
         });
         .theme-light({
             color: @color;
