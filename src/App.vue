@@ -266,11 +266,33 @@
             text-decoration: none;
         }
 
+        @keyframes tag {
+            0% {
+                content: "";
+            }
+            25% {
+                content: "B";
+            }
+            50% {
+                content: "BE";
+            }
+            75% {
+                content: "BET";
+            }
+            100% {
+                content: "BETA";
+            }
+        }
+
         &::after {
             content: "BETA";
 
-            font-size: 12px;
+            animation-name: tag;
+            animation-delay: 2s;
+            animation-duration: 1.2s;
+
             font-family: monospace;
+            font-size: 12px;
 
             margin-left: 2px;
             padding-left: 4px;
