@@ -46,7 +46,7 @@
 
         </div>
 
-        <div class="background-logo">fsEdit|</div>
+        <div class="background-logo">fsEdit|<div class="author">by holubv</div></div>
 
         <welcome-screen ref="welcomeScreen" v-if="showWelcomeScreen"></welcome-screen>
 
@@ -272,7 +272,15 @@
         user-select: none;
         pointer-events: none;
 
-        .theme({ color: fade(@color, 10%); })
+        .theme({ color: fade(@color, 10%); });
+
+        & .author {
+            font-size: 16px;
+
+            @media (max-width: 512px) {
+                font-size: 12px;
+            }
+        }
     }
 
     footer {
