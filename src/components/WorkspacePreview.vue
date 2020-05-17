@@ -1,6 +1,6 @@
 <template>
 
-    <div>
+    <section>
         <div class="ws-link">
             <router-link :to="{ name: 'show', params: {workspace: ws.hash}}">{{ ws.hash }}</router-link>
         </div>
@@ -15,7 +15,7 @@
                 <div class="info">+{{ ws.count - 2 }} more file{{ ws.count - 2 > 1 ? 's' : '' }}</div>
             </li>
         </ul>
-    </div>
+    </section>
 
 </template>
 
