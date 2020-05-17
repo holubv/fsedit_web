@@ -264,6 +264,7 @@
         position: fixed;
         bottom: @nav-height + 8px;
         right: 32px;
+        text-align: right;
 
         .logo-font(4vw);
 
@@ -275,6 +276,7 @@
         .theme({ color: fade(@color, 10%); });
 
         & .author {
+            margin-right: 4px;
             font-size: 16px;
 
             @media (max-width: 512px) {
