@@ -1,5 +1,36 @@
 {
   "lang": "Čeština",
   "login": "Přihlásit se",
-  "settings": "Nastavení"
+  "auth": {
+    "email": "Email",
+    "password": "Heslo",
+    "passwordAgain": "Heslo znovu",
+    "switch": {
+      "register": "Již zaregistrován?",
+      "login": "Registrovat?"
+    },
+    "btn": {
+      "register": "Registrovat",
+      "login": "Přihlásit se"
+    }
+  },
+  "settings": "Nastavení",
+  "themes": {
+    "light": "Světlý",
+    "dark": "Tmavý"
+  },
+  "welcome": {
+    "title": "Vítejte na",
+    "desc": "Začněte psaním, vkládáním nebo přetažením souborů či složek"
+  },
+  "err": {
+    "server": "500 Chyba serveru",
+    "net": "Požadavek na server selhal",
+    "unknown": "Neznámá chyba",
+    "auth": {
+      "noCaptcha": "You have to complete captcha challenge",
+      "wrongCredentials": "Špatné přihlašovací údaje, zkontrolujte email a heslo",
+      "alreadyRegistered": "Email je již registrován"
+    }
+  }
 }
