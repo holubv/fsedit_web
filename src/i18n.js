@@ -11,7 +11,9 @@ if (!lang) {
     lang = 'en';
 }
 
-lang = 'en'; //force english todo language selector
+if (!['en', 'cs'].includes(lang)) {
+    lang = 'en';
+}
 
 export default new VueI18n({
     locale: lang,

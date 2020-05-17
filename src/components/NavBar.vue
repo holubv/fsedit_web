@@ -6,6 +6,9 @@
                 <li>
                     <theme-selector></theme-selector>
                 </li>
+                <li>
+                    <locale-selector></locale-selector>
+                </li>
                 <!--<li><a href="#">{{ $t('settings') }}</a></li>-->
                 <li v-if="!$fsedit.logged">
                     <router-link :to="{ name: 'login', query: {ws: $route.params.workspace}}">{{ $t('login') }}</router-link>
@@ -20,7 +23,6 @@
                 </li>
             </ul>
         </nav>
-        <!--<locale-selector></locale-selector>-->
     </div>
 </template>
 

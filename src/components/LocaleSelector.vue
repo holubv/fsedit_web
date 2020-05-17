@@ -1,7 +1,8 @@
 <template>
     <div>
+        <i class="fas fa-globe"></i>
         <select v-model="$i18n.locale" title="Locale selector">
-            <option v-for="(_, lang) in $i18n.messages" :value="lang">{{ lang }}</option>
+            <option v-for="(obj, lang) in $i18n.messages" :value="lang">{{ obj.lang }}</option>
         </select>
     </div>
 </template>
@@ -18,6 +19,18 @@
     }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+
+    @import "../theme/global";
+
+    div {
+        .theme({ color: @primary-color; });
+    }
+
+    select {
+        .theme({ background-color: @background-color; color: @primary-color; });
+        border: 0;
+        font-size: 16px;
+    }
 
 </style>
