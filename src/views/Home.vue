@@ -40,32 +40,35 @@
                 <template slot="side-foot">
                     <div :class="['side-panel', 'size-' + sideView]">
 
-                        <div v-if="editable">
-                            <button class="btn"
-                                    :disabled="!focusedItem"
-                                    @click.prevent="onItemRename(null)"
-                                    title="Rename">
-                                <i class="fas fa-i-cursor"></i>
-                                <span v-if="sideView !== 'small'">{{ $t('side.rename') }}</span>
-                            </button>
-                            <button class="btn"
-                                    :disabled="!focusedItem"
-                                    @click.prevent="onItemDelete(null)"
-                                    title="Delete">
-                                <i class="fas fa-trash-alt"></i>
-                                <span v-if="sideView !== 'small'">{{ $t('side.delete') }}</span>
-                            </button>
-                        </div>
+                        <button v-if="editable"
+                                class="btn"
+                                :disabled="!focusedItem"
+                                @click.prevent="onItemRename(null)"
+                                title="Rename">
+                            <i class="fas fa-i-cursor"></i>
+                            <span v-if="sideView !== 'small'">{{ $t('side.rename') }}</span>
+                        </button>
+
+                        <button v-if="editable"
+                                class="btn"
+                                :disabled="!focusedItem"
+                                @click.prevent="onItemDelete(null)"
+                                title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                            <span v-if="sideView !== 'small'">{{ $t('side.delete') }}</span>
+                        </button>
+
+
+                        <file-raw-link class="btn" title="Raw" :item="focusedItem">
+                            <i class="far fa-file-code"></i>
+                            <span v-if="sideView !== 'small'">{{ $t('side.raw') }}</span>
+                        </file-raw-link>
 
                         <file-raw-link class="btn" title="Download" :item="focusedItem" :download="true">
                             <i class="fas fa-download"></i>
                             <span v-if="sideView !== 'small'">{{ $t('side.download') }}</span>
                         </file-raw-link>
 
-                        <file-raw-link class="btn" title="Raw" :item="focusedItem">
-                            <i class="far fa-file-code"></i>
-                            <span v-if="sideView !== 'small'">{{ $t('side.raw') }}</span>
-                        </file-raw-link>
 
                     </div>
                 </template>
@@ -484,19 +487,31 @@
 
     .side-panel {
 
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+
         & .btn {
+            flex-grow: 1;
             margin-right: 5px;
             margin-left: 5px;
+
+            & + .btn {
+                margin-top: 0;
+            }
         }
 
         &.size-small .btn {
+
             & .far, & .fas {
                 margin: 0;
             }
         }
     }
 
-    a.btn {
-        display: inline-block;
+    .btn {
+        display: block;
     }
+
+
 </style>

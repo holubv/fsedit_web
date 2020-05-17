@@ -1,6 +1,7 @@
 <template>
     <div>
         <!--<button class="btn" v-for="theme in themes" v-on:click="changeTheme(theme)">{{ $t('themes.' + theme) }}</button>-->
+        <!--{{ $t('themes.' + theme) }}-->
         <a href="#" v-on:click.prevent="toggleTheme"><i class="fas fa-palette"></i> {{ $t('theme') }}</a>
     </div>
 </template>
@@ -23,6 +24,11 @@
                 this.changeTheme(this.isLight ? 'light' : 'dark')
             }
         },
+        // computed: {
+        //     theme() {
+        //         return this.$fsedit.theme;
+        //     }
+        // }
     }
 </script>
 
