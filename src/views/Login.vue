@@ -5,7 +5,7 @@
             <div>
                 <label for="email">{{ $t('auth.email') }}</label>
                 <div :class="['input-state', {success: register && emailValid, error: email && !emailValid}]">
-                    <input v-model="email" type="email" name="email" id="email"
+                    <input v-focus v-model="email" type="email" name="email" id="email"
                            maxlength="64" autofocus pattern="[!-?A-~]+@[!-?A-~]+" required>
                 </div>
             </div>

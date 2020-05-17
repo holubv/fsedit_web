@@ -32,6 +32,12 @@ if (token) {
     Vue.prototype.$api.defaults.headers['X-Api-Token'] = token
 }
 
+Vue.directive('focus', {
+    inserted: function (el) {
+        el.focus();
+    }
+});
+
 new Vue({
     router,
     i18n,
