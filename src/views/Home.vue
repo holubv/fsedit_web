@@ -9,7 +9,7 @@
             <split-panel :side="sideView" @switch="onSidePanelSwitch">
 
                 <template slot="side-head">
-                    <div v-if="editable" :class="['side-panel', 'size-' + sideView]">
+                    <div v-if="editable" :class="['side-panel', 'panel-top', 'size-' + sideView]">
                         <button class="btn primary"
                                 @click.prevent="onAddItem(false)"
                                 title="Add file">
@@ -491,14 +491,15 @@
         flex-wrap: wrap;
         justify-content: space-around;
 
+        &.panel-top {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
         & .btn {
             flex-grow: 1;
             margin-right: 5px;
             margin-left: 5px;
-
-            & + .btn {
-                margin-top: 0;
-            }
         }
 
         &.size-small .btn {
