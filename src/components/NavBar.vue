@@ -1,25 +1,27 @@
 <template>
-    <nav>
+    <div class="container">
         <div class="logo"><router-link :to="{ name: 'index'}">fsEdit|</router-link></div>
-        <ul class="menu">
-            <li>
-                <theme-selector></theme-selector>
-            </li>
-            <!--<li><a href="#">{{ $t('settings') }}</a></li>-->
-            <li v-if="!$fsedit.logged">
-                <router-link :to="{ name: 'login', query: {ws: $route.params.workspace}}">{{ $t('login') }}</router-link>
-            </li>
-            <li v-else>
-                <router-link :to="{ name: 'profile'}">
-                    <i class="fas fa-user"></i> {{ username }}
-                </router-link>
-            </li>
-            <li v-if="$fsedit.logged">
-                <a href="#" @click.prevent="$fsedit.token = null; $fsedit.user = {}">Logout</a> <!-- todo way to logout -->
-            </li>
-        </ul>
+        <nav class="menu">
+            <ul>
+                <li>
+                    <theme-selector></theme-selector>
+                </li>
+                <!--<li><a href="#">{{ $t('settings') }}</a></li>-->
+                <li v-if="!$fsedit.logged">
+                    <router-link :to="{ name: 'login', query: {ws: $route.params.workspace}}">{{ $t('login') }}</router-link>
+                </li>
+                <li v-else>
+                    <router-link :to="{ name: 'profile'}">
+                        <i class="fas fa-user"></i> {{ username }}
+                    </router-link>
+                </li>
+                <li v-if="$fsedit.logged">
+                    <a href="#" @click.prevent="$fsedit.token = null; $fsedit.user = {}">Logout</a> <!-- todo way to logout -->
+                </li>
+            </ul>
+        </nav>
         <!--<locale-selector></locale-selector>-->
-    </nav>
+    </div>
 </template>
 
 <script>
@@ -47,7 +49,7 @@
 <style scoped lang="less">
     @import "../theme/global";
 
-    nav {
+    .container {
         .theme({ background-color: @background-color; color: @color; border-bottom-color: darken(@background-color, 20%); });
         height: @nav-height;
         border-bottom: 1px solid;

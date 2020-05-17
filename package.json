@@ -21,8 +21,8 @@
     "vue2-dropzone": "^3.5.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.2.0",
-    "@vue/cli-service": "^3.2.0",
+    "@vue/cli-plugin-babel": "^3.6.0",
+    "@vue/cli-service": "^3.6.0",
     "archiver": "^3.0.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",

@@ -1,6 +1,6 @@
 <template>
     <div :class="['split-panel', 'display-' + side]">
-        <div class="side">
+        <aside class="side">
             <div class="side-head" ref="sideHead">
                 <slot name="side-head"></slot>
             </div>
@@ -18,10 +18,10 @@
                     <i v-else class="fas fa-chevron-left"></i>
                 </div>
             </div>
-        </div>
-        <div class="content">
+        </aside>
+        <section class="content">
             <slot></slot>
-        </div>
+        </section>
     </div>
 </template>
 
