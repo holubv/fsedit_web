@@ -15,6 +15,9 @@
       "fileName": "Název souboru s připonou"
     }
   },
+  "drop": {
+    "dropHere": "Sem vložte soubory a složky"
+  },
   "workspaces": {
     "title": "Vaše sdílení",
     "notFound": "Nenalezeny žádné položky",

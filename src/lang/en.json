@@ -15,6 +15,9 @@
       "fileName": "Enter file name with extension:"
     }
   },
+  "drop": {
+    "dropHere": "Drop files and folders here"
+  },
   "workspaces": {
     "title": "Workspaces",
     "notFound": "No workspaces found",
