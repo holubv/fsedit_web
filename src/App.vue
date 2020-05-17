@@ -261,6 +261,9 @@
         display: inline-block;
         .logo-font();
 
+        width: 89px;
+        text-align: left;
+
         & * {
             .theme-color();
             text-decoration: none;
