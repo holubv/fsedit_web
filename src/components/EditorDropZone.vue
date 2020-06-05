@@ -3,8 +3,9 @@
 
         <slot><!-- slot content --></slot>
 
+        <div id="drop-empty"></div>
+
         <div class="drop-background" v-if="showDropInput">
-            <!--<div id="dropzone-previews" class="dropzone-previews"></div>-->
             <div class="drop-info">
                 <div>
                     <i class="fas fa-cloud-upload-alt"></i>
@@ -13,8 +14,8 @@
             </div>
         </div>
 
-        <div>
-
+        <div class="progress-panel">
+            {{ filesInQueue }}
         </div>
 
         <vue2-drop-zone class="drop-zone"
@@ -47,12 +48,13 @@
         data() {
             return {
                 showDropInput: false,
+                filesInQueue: 0,
                 dropZoneOptions: {
                     url: 'https://api.fsedit.cf/files/upload',
                     method: 'post',
                     createImageThumbnails: false,
                     clickable: false,
-                    //previewsContainer: '#dropzone-previews',
+                    previewsContainer: '#drop-empty',
                     previewTemplate: this.dropZoneTemplate(),
                     headers: {
                         Accept: 'application/json',
@@ -85,6 +87,7 @@
         },
         methods: {
             onFileAdded(file) {
+                this.filesInQueue++;
                 if (this.workspaceHash) {
                     this.$nextTick(() => {
                         this.$refs.dropZone.processQueue();
@@ -110,127 +113,40 @@
                 }
             },
             onFileSendComplete() {
+                this.filesInQueue = 0;
                 this.showDropInput = false;
                 this.$emit('file-upload-done');
             },
             onDragEnd() {
-                if (!this.$refs.dropZone.getQueuedFiles().length) {
-                    this.showDropInput = false;
-                }
+                // if (!this.$refs.dropZone.getQueuedFiles().length) {
+                //     this.showDropInput = false;
+                // }
+                this.showDropInput = false;
             },
             dropZoneTemplate: function () {
-                return '';
+                return '<div></div>';
             },
-            // dropZoneTemplate: function () {
-            //     return `<div class="dz-preview dz-file-preview">
-            //     <div class="dz-image">
-            //         <div data-dz-thumbnail-bg></div>
-            //     </div>
-            //
-            //     <div class="dz-details">
-            //         <div class="name-wrapper">
-            //             <div class="dz-filename"><span data-dz-name></span></div>
-            //         </div>
-            //         <div class="status-wrapper">
-            //             <div class="dz-size"><span data-dz-size></span></div>
-            //             <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-            //             <div class="icon-wrapper">
-            //                 <div class="dz-success-mark"><i class="fas fa-check"></i></div>
-            //                 <div class="dz-error-mark"><i class="fas fa-times"></i></div>
-            //             </div>
-            //         </div>
-            //     </div>
-            //
-            //     <div class="dz-error-message"><span data-dz-errormessage></span></div>
-            // </div>`
-            // },
         }
     }
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 
-    .dz-preview {
+    @import "../theme/global";
 
-        padding-top: 12px;
-        padding-bottom: 12px;
-
-        & .dz-image {
-            display: none;
-        }
-
-        & .dz-details > div,
-        & .status-wrapper > div {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        & .icon-wrapper {
-            width: 16px;
-            text-align: center;
-        }
-
-        & .dz-filename {
-            margin-right: 22px;
-        }
-
-        & .status-wrapper {
-            float: right;
-        }
-
-        & .dz-progress {
-            display: inline-block;
-            width: 60px;
-            height: 22px;
-            vertical-align: middle;
-            border-radius: 3px;
-            overflow: hidden;
-            background-color: orange;
-            margin-right: 12px;
-            margin-left: 12px;
-
-            & span {
-                height: 100%;
-                background-color: yellow;
-                display: inline-block;
-            }
-        }
-
-        & .dz-filename {
-            display: inline-block;
-            margin-right: 22px;
-            vertical-align: middle;
-        }
-
-        @media(max-width: 512px) {
-            & .dz-details {
-                & .name-wrapper, & .status-wrapper {
-                    width: 100%;
-                    display: block;
-                }
-
-                & .status-wrapper {
-                    text-align: right;
-                }
-            }
-        }
-
-        & .dz-error-mark, & .dz-success-mark {
-            display: none;
-        }
-
-        &.dz-error .dz-error-mark {
-            display: inline-block;
-        }
-
-        &.dz-success .dz-success-mark {
-            display: inline-block;
-        }
+    .progress-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 120px;
+        height: 120px;
+        background-color: red;
+        z-index: 2;
     }
 
-</style>
-
-<style scoped lang="less">
+    #drop-empty {
+        display: none;
+    }
 
     .drop-input {
         display: block;
@@ -276,8 +192,6 @@
 
         padding: 12px 24px;
     }
-
-
 
     .hidden {
         display: none;
