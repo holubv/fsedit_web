@@ -8,6 +8,13 @@ Vue.config.productionTip = false;
 
 let apiUrl = 'https://api.fsedit.cf';
 let token = window.localStorage.getItem('token') || null;
+let tokenCreated = parseInt(window.localStorage.getItem('token-created') || '0');
+if (tokenCreated + 2592000000 < Date.now()) {
+    console.warn('expired token detected, please log in');
+    token = null;
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('token-created');
+}
 
 Vue.prototype.$fsedit = new Vue({
     //reactive container
