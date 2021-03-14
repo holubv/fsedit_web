@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
 import Axios from 'axios'
+import Analytics from "./analytics";
 
 Vue.config.productionTip = false;
 
@@ -16,13 +17,18 @@ if (tokenCreated + 1814400000 < Date.now()) {
     window.localStorage.removeItem('token-created');
 }
 
+let analytics = new Analytics();
+analytics.init();
+analytics.logPageView();
+
 Vue.prototype.$fsedit = new Vue({
     //reactive container
     data: {
         theme: null,
         apiUrl: apiUrl,
         token: null,
-        user: {}
+        user: {},
+        analytics: analytics
     },
     computed: {
         logged() {

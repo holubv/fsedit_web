@@ -255,6 +255,9 @@
              * @returns {Promise<Workspace>}
              */
             createWorkspace() {
+
+                this.$fsedit.analytics.logEvent('e-create-ws');
+
                 return Workspace.create().then(ws => {
                     this.workspace = ws;
                     this.$router.push({path: `/${this.workspace.hash}`});
@@ -354,6 +357,13 @@
                 if (!name) {
                     return;
                 }
+
+                if (folder) {
+                    this.$fsedit.analytics.logEvent('e-add-folder');
+                } else {
+                    this.$fsedit.analytics.logEvent('e-add-file');
+                }
+
                 this.getWorkspace()
                     .then(() => this.addItem(name, folder))
                     .then(f => this.openFile(f))
