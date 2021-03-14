@@ -54,7 +54,7 @@
             this.$fsedit.theme = theme ? theme : 'dark';
 
             let created = parseInt(window.localStorage.getItem('token-created') || '0');
-            if (created + 2592000000 < Date.now()) {
+            if (created + 1814400000 < Date.now()) {
                 console.warn('expired token detected, please log in');
                 return;
             }
