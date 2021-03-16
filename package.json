@@ -18,7 +18,7 @@
     "vue-i18n": "^8.4.0",
     "vue-recaptcha": "^1.1.1",
     "vue-router": "^3.0.2",
-    "vue2-dropzone": "^3.5.2"
+    "vue2-dropzone": "^3.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",
