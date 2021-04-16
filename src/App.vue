@@ -30,7 +30,6 @@
             '$fsedit.token': function (token) {
                 if (token) {
                     window.localStorage.setItem('token', token);
-                    window.localStorage.setItem('token-created', Date.now().toString());
                     this.$api.defaults.headers['X-Api-Token'] = token;
                 } else {
                     window.localStorage.removeItem('token');

@@ -124,6 +124,8 @@
                             email: rs.data.email
                         };
 
+                        window.localStorage.setItem('token-created', Date.now().toString());
+
                         let ws = this.$route.query.ws;
                         if (ws) {
                             this.$router.push({name: 'show', params: {workspace: ws}});
